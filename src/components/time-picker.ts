@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { HomeAssistant } from 'custom-card-helpers';
-import { DefaultTimeStep } from '../const';
+import { DefaultTimeStep } from '../var';
 import { ETimeEvent } from '../types';
 import { stringToTime, timeToString, roundTime, parseRelativeTime } from '../data/date-time/time';
 import { stringToDate } from '../data/date-time/string_to_date';
@@ -27,17 +27,17 @@ export class TimePicker extends LitElement {
     return Math.abs(this._time);
   }
   set time(value: number) {
-    const newTime = roundTime(value, this.stepSize, {
+    var newTime = roundTime(value, this.stepSize, {
       wrapAround: !this.relativeMode,
       maxHours: this.relativeMode ? this.maxOffset : undefined,
     });
-    const timeUpdated = newTime != this._time && isDefined(this._time);
+    var timeUpdated = newTime != this._time && isDefined(this._time);
     this._time = newTime;
     if (timeUpdated) this.updateValue();
   }
 
   firstUpdated() {
-    const res = parseRelativeTime(this.value);
+    var res = parseRelativeTime(this.value);
     if (!res) this.time = stringToTime(this.value, this.hass!);
     else {
       this.relativeMode = true;
@@ -48,28 +48,28 @@ export class TimePicker extends LitElement {
 
   updateValue() {
     if (this.relativeMode) {
-      const sign = this._time >= 0 ? '+' : '-';
-      const offset = timeToString(this.time);
+      var sign = this._time >= 0 ? '+' : '-';
+      var offset = timeToString(this.time);
       this.value = `${this.event}${sign}${offset}`;
     } else {
       this.value = timeToString(this.time);
     }
-    const myEvent = new CustomEvent('change');
+    var myEvent = new CustomEvent('change');
     this.dispatchEvent(myEvent);
   }
 
   getTimeParts() {
-    const timeString = this.relativeMode
+    var timeString = this.relativeMode
       ? timeToString(this.time)
       : formatTime(stringToDate(timeToString(this.time)), getLocale(this.hass!));
 
-    const timeParts: string[] = timeString.split(/:|\ /);
+    var timeParts: string[] = timeString.split(/:|\ /);
     timeParts[0] = String(Number(timeParts[0]));
     return timeParts;
   }
 
   render() {
-    const timeParts = this.getTimeParts();
+    var timeParts = this.getTimeParts();
 
     return html`
       <div class="time-picker">
@@ -183,9 +183,9 @@ export class TimePicker extends LitElement {
     if (!this.hass) return;
     this.relativeMode = !this.relativeMode;
 
-    const sunEntity = this.hass!.states['sun.sun'];
-    const ts_sunrise = stringToTime(sunEntity.attributes.next_rising, this.hass!);
-    const ts_sunset = stringToTime(sunEntity.attributes.next_setting, this.hass!);
+    var sunEntity = this.hass!.states['sun.sun'];
+    var ts_sunrise = stringToTime(sunEntity.attributes.next_rising, this.hass!);
+    var ts_sunset = stringToTime(sunEntity.attributes.next_setting, this.hass!);
 
     if (this.relativeMode) {
       this.event =
@@ -202,12 +202,12 @@ export class TimePicker extends LitElement {
   }
 
   private _hoursChanged(ev: Event, amPmMode = false) {
-    const el = ev.target as HTMLInputElement;
-    const inputValue = el.value;
+    var el = ev.target as HTMLInputElement;
+    var inputValue = el.value;
     let newValue = Number(inputValue);
 
-    const minHours = this.relativeMode ? 0 : amPmMode ? 1 : 0;
-    const maxHours = this.relativeMode ? this.maxOffset : amPmMode ? 12 : 23;
+    var minHours = this.relativeMode ? 0 : amPmMode ? 1 : 0;
+    var maxHours = this.relativeMode ? this.maxOffset : amPmMode ? 12 : 23;
 
     let isValid = true;
     if (inputValue.length > 2) {
@@ -235,8 +235,8 @@ export class TimePicker extends LitElement {
   }
 
   private _minutesChanged(ev: Event) {
-    const el = ev.target as HTMLInputElement;
-    const inputValue = el.value;
+    var el = ev.target as HTMLInputElement;
+    var inputValue = el.value;
     let newValue = Number(inputValue);
     let isValid = true;
 
@@ -264,12 +264,12 @@ export class TimePicker extends LitElement {
   }
 
   private _onFocus(ev: Event) {
-    const el = ev.target as HTMLInputElement;
+    var el = ev.target as HTMLInputElement;
     el.value = '';
   }
 
   private _handleHoursInput(ev: Event, timeParts: string[]) {
-    const el = ev.target as HTMLInputElement;
+    var el = ev.target as HTMLInputElement;
     let value = Number(el.value);
 
     if (!el.value.length) {
@@ -278,13 +278,13 @@ export class TimePicker extends LitElement {
     }
     if (timeParts.length > 2 && value == 12) value = 0;
     if (timeParts.length > 2 && timeParts[2] == 'PM') value += 12;
-    const minutes = Number(timeParts[1]);
+    var minutes = Number(timeParts[1]);
     this.time = this._time >= 0 ? value * 3600 + minutes * 60 : -(value * 3600 + minutes * 60);
     el.value = this.getTimeParts()[0];
   }
 
   private _handleMinutesInput(ev: Event, timeParts: string[]) {
-    const el = ev.target as HTMLInputElement;
+    var el = ev.target as HTMLInputElement;
     let value = Number(el.value);
 
     if (!el.value.length) {
