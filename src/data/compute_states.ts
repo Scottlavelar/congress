@@ -11,7 +11,7 @@ export function computeStates(entity_id: string, hass: HomeAssistant, config: Ca
   let stateConfig = config.standard_configuration ? standardStates(entity_id, hass) : null;
 
   //get customizations for entity
-  const customizedStates = Object.entries(config.customize)
+  var customizedStates = Object.entries(config.customize)
     .filter(([a]) => matchPattern(a, entity_id))
     .sort((a, b) => b[0].length - a[0].length)
     .map(([, b]) => b.states)
