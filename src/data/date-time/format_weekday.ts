@@ -1,9 +1,9 @@
 import { FrontendTranslationData } from 'custom-card-helpers';
 
-export var weekdayArray = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+export const weekdayArray = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-export var formatWeekday = (date: Date | number, locale: FrontendTranslationData, short?: boolean): string => {
-  var supportLocaleString = () => {
+export const formatWeekday = (date: Date | number, locale: FrontendTranslationData, short?: boolean): string => {
+  const supportLocaleString = () => {
     try {
       new Date().toLocaleDateString('i');
     } catch (e) {
@@ -23,7 +23,7 @@ export var formatWeekday = (date: Date | number, locale: FrontendTranslationData
       weekday: short ? 'short' : 'long',
     });
   } else {
-    var weekday = date.getDay();
+    const weekday = date.getDay();
     return short ? weekdayArray[weekday].substr(0, 3) : weekdayArray[weekday];
   }
 };
