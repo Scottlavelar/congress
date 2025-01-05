@@ -9,7 +9,7 @@ export function computeEntities(
   config: CardConfig,
   options: { filterActions: boolean; filterStates: boolean } = { filterActions: true, filterStates: false }
 ) {
-  const entities = Object.keys(hass.states).filter(e => entityFilter(e, config));
+  let entities = Object.keys(hass.states).filter(e => entityFilter(e, config));
 
   if ('notify' in hass.services) {
     entities = [
