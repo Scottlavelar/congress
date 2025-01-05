@@ -1,6 +1,6 @@
 import { HomeAssistant } from 'custom-card-helpers';
 
-let variableList: Record<string, Record<string, string>> = {
+const variableList: Record<string, Record<string, string>> = {
   climate: {
     temperature: 'ui.card.weather.attributes.temperature',
     target_temp_low: 'ui.panel.lovelace.editor.card.generic.minimum',
@@ -52,7 +52,7 @@ let variableList: Record<string, Record<string, string>> = {
   },
 };
 
-export let getVariableName = (domain: string, variable: string, hass: HomeAssistant) => {
+export const getVariableName = (domain: string, variable: string, hass: HomeAssistant) => {
   if (domain in variableList && variable in variableList[domain]) {
     return hass.localize(variableList[domain][variable]);
   }
