@@ -4,7 +4,7 @@ import { HomeAssistant, LovelaceCardEditor, fireEvent, computeDomain, LovelaceCa
 import { CardConfig, EntityElement } from './types';
 import { getLocale, sortAlphabetically, AsArray, PrettyPrintIcon, pick } from './helpers';
 import { localize } from './localize/localize';
-import { DefaultCardConfig, DefaultTimeStep } from './const';
+import { DefaultCardConfig, DefaultTimeStep } from './var';
 import { commonStyle } from './styles';
 import { fetchSchedules, fetchTags } from './data/websockets';
 
@@ -43,7 +43,7 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
   async firstUpdated() {
     await loadHaForm();
     this.scheduleEntities = (await fetchSchedules(this.hass!)).map(e => e.entity_id);
-    const tagOptions = (await fetchTags(this.hass!)).map(e => e.name);
+    var tagOptions = (await fetchTags(this.hass!)).map(e => e.name);
     tagOptions.sort(sortAlphabetically);
     this.tagOptions = tagOptions;
   }
@@ -359,15 +359,15 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
     if (!this._config || !this.hass) return [];
     let options = this.tagOptions || [];
     if (this._config.tags) {
-      const configTags = AsArray(this._config.tags);
+      var configTags = AsArray(this._config.tags);
       options = [...options, ...configTags.filter(e => !options.includes(e))];
     }
     return options.map(e => Object({ name: e, value: e }));
   }
 
   private _setSortBy(ev: Event) {
-    const checked = (ev.target as HTMLInputElement).checked;
-    const value = (ev.target as HTMLInputElement).value;
+    var checked = (ev.target as HTMLInputElement).checked;
+    var value = (ev.target as HTMLInputElement).value;
     let config = AsArray(this._config?.sort_by || DefaultCardConfig.sort_by);
     if (value != 'state' && checked) config = config.filter(e => e == 'state');
     if (!config.includes(value) && checked) config = [...config, value];
@@ -376,8 +376,8 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
   }
 
   private _setDisplayOptionsPrimary(ev: Event) {
-    const value = (ev.target as HTMLInputElement).value;
-    const displayOptions = {
+    var value = (ev.target as HTMLInputElement).value;
+    var displayOptions = {
       ...(this._config?.display_options || DefaultCardConfig.display_options),
       primary_info: value,
     };
@@ -385,22 +385,22 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
   }
 
   private _setDisplayOptionsSecondary(ev: Event) {
-    const value = (ev.target as HTMLInputElement).value;
-    const checked = (ev.target as HTMLInputElement).checked;
+    var value = (ev.target as HTMLInputElement).value;
+    var checked = (ev.target as HTMLInputElement).checked;
     let displayOptions = {
       ...(this._config?.display_options || DefaultCardConfig.display_options),
     };
     let secondaryInfo = AsArray(displayOptions.secondary_info || []);
     secondaryInfo = checked ? Array.from(new Set([...secondaryInfo, value])) : secondaryInfo.filter(e => e !== value);
     secondaryInfo.sort((a, b) => {
-      const ranking = {
+      var ranking = {
         'relative-time': 1,
         time: secondaryInfo.includes('relative-time') ? 3 : 2,
         days: secondaryInfo.includes('relative-time') ? 2 : 3,
         'additional-tasks': 4,
       };
-      const rankA = Object.keys(ranking).includes(a) ? ranking[a] : 5;
-      const rankB = Object.keys(ranking).includes(b) ? ranking[b] : 5;
+      var rankA = Object.keys(ranking).includes(a) ? ranking[a] : 5;
+      var rankB = Object.keys(ranking).includes(b) ? ranking[b] : 5;
       if (rankA > rankB) return 1;
       if (rankA < rankB) return -1;
       return 0;
@@ -412,7 +412,7 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
   getDomainSwitches() {
     if (!this._config || !this.hass) return;
 
-    const entities = computeEntities(
+    var entities = computeEntities(
       this.hass,
       { ...DefaultCardConfig, include: ['*'] },
       { filterActions: true, filterStates: true }
@@ -421,13 +421,13 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
       .map(e => parseEntity(e, this.hass!, { include: ['*'] }))
       .filter(e => standardStates(e.id, this.hass!) || computeActions(e.id, this.hass!, DefaultCardConfig));
 
-    const domainList = entities.map(e => computeDomain(e.id)).filter((v, k, arr) => arr.indexOf(v) === k);
+    var domainList = entities.map(e => computeDomain(e.id)).filter((v, k, arr) => arr.indexOf(v) === k);
     domainList.sort((a, b) => (a.trim().toLowerCase() < b.trim().toLowerCase() ? -1 : 1));
 
     return domainList.map(domain => {
-      const count = entities.filter(e => computeDomain(e.id) == domain).length;
-      const domainEntities = entities.filter(e => computeDomain(e.id) == domain);
-      const includedCount = domainEntities.filter(e => entityFilter(e.id, this._config!)).length;
+      var count = entities.filter(e => computeDomain(e.id) == domain).length;
+      var domainEntities = entities.filter(e => computeDomain(e.id) == domain);
+      var includedCount = domainEntities.filter(e => entityFilter(e.id, this._config!)).length;
 
       if (!count) return ``;
       return html`
@@ -492,9 +492,9 @@ export class SchedulerCardEditor extends LitElement implements LovelaceCardEdito
 
   toggleSelectEntity(entity_id: string, newValue?: boolean) {
     if (!this._config || !this.hass) return;
-    const isIncluded = entityFilter(entity_id, this._config);
+    var isIncluded = entityFilter(entity_id, this._config);
     if (newValue === undefined) newValue = !isIncluded;
-    const entityDomain = computeDomain(entity_id);
+    var entityDomain = computeDomain(entity_id);
 
     let include = [...(this._config.include || [])];
     let exclude = [...(this._config.exclude || [])];
