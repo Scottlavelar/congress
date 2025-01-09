@@ -1,13 +1,13 @@
 import { computeDomain, HomeAssistant, stateIcon } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 
-export let binarySensorIcon = (stateObj: HassEntity) => {
+export const binarySensorIcon = (stateObj: HassEntity) => {
   if (stateObj) return stateIcon({ ...stateObj, state: 'off' }) || 'mdi:radiobox-blank';
   else return 'mdi:radiobox-blank';
 };
 
-export let sensorIcon = (stateObj: HassEntity) => {
-  let deviceClass = stateObj.attributes.device_class || '';
+export const sensorIcon = (stateObj: HassEntity) => {
+  const deviceClass = stateObj.attributes.device_class || '';
   switch (deviceClass) {
     case 'humidity':
       return 'mdi:water-percent';
@@ -26,8 +26,8 @@ export let sensorIcon = (stateObj: HassEntity) => {
   }
 };
 
-let coverIcon = (stateObj: HassEntity, state?: string) => {
-  let closedState = state == 'closed';
+const coverIcon = (stateObj: HassEntity, state?: string) => {
+  const closedState = state == 'closed';
   switch (stateObj.attributes.device_class) {
     case 'garage':
       return closedState ? 'mdi:garage' : 'mdi:garage-open';
@@ -42,7 +42,7 @@ let coverIcon = (stateObj: HassEntity, state?: string) => {
   }
 };
 
-export let domainIcons: Record<string, string> = {
+export const domainIcons: Record<string, string> = {
   alarm_control_panel: 'mdi:alarm-light-outline',
   automation: 'mdi:playlist-play',
   binary_sensor: 'mdi:radiobox-blank',
@@ -80,9 +80,9 @@ export let domainIcons: Record<string, string> = {
   water_heater: 'mdi:water-boiler',
 };
 
-export let standardIcon = (entity_id: string, hass: HomeAssistant) => {
-  let domain = computeDomain(entity_id);
-  let stateObj = hass.states[entity_id];
+export const standardIcon = (entity_id: string, hass: HomeAssistant) => {
+  const domain = computeDomain(entity_id);
+  const stateObj = hass.states[entity_id];
 
   switch (domain) {
     case 'binary_sensor':
