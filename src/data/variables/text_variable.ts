@@ -4,9 +4,9 @@ import { EVariableType, TextVariable } from '../../types';
 export function textVariable(...config: Partial<TextVariable>[]) {
   //factory function to create ListVariable from configuration
 
-  const name = config.map(e => e.name).filter(isDefined);
+  let name = config.map(e => e.name).filter(isDefined);
 
-  const variable: TextVariable = {
+  let variable: TextVariable = {
     type: EVariableType.Text,
     name: name.length ? name.reduce((_acc, val) => val) : undefined,
     multiline: config.some(e => e.multiline),
