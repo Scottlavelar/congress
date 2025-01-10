@@ -2,7 +2,7 @@ import { LitElement, html, PropertyValues, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { computeCardSize, fireEvent, HomeAssistant, LovelaceCard, LovelaceCardEditor } from 'custom-card-helpers';
 import { CardConfig, ScheduleConfig, Action, Schedule, SchedulerEventData } from './types';
-import { CARD_VERSION, DefaultCardConfig, WebsocketEvent } from './let';
+import { CARD_VERSION, DefaultCardConfig, WebsocketEvent } from './const';
 import {
   AsArray,
   calculateTimeline,
@@ -58,17 +58,17 @@ interface ScheduleDisplayInfo {
   icon: string;
 }
 
-let computeScheduleTimestamp = (schedule: Schedule) =>
+const computeScheduleTimestamp = (schedule: Schedule) =>
   new Date(schedule.timestamps[schedule.next_entries[0]]).valueOf();
 
-let sortByRelativeTime = (schedules: Schedule[]) => {
-  let output = [...schedules];
+const sortByRelativeTime = (schedules: Schedule[]) => {
+  const output = [...schedules];
   output.sort((a, b) => {
-    let remainingA = computeScheduleTimestamp(a);
-    let remainingB = computeScheduleTimestamp(b);
-    let now = new Date().valueOf();
+    const remainingA = computeScheduleTimestamp(a);
+    const remainingB = computeScheduleTimestamp(b);
+    const now = new Date().valueOf();
 
-    let reverse = remainingA < now && remainingB < now;
+    const reverse = remainingA < now && remainingB < now;
 
     if (remainingA !== null && remainingB !== null) {
       if (remainingA < now && remainingB >= now) return 1;
@@ -84,26 +84,26 @@ let sortByRelativeTime = (schedules: Schedule[]) => {
   return output;
 };
 
-let sortByTitle = (schedules: Schedule[], displayInfo: Record<string, ScheduleDisplayInfo>) => {
-  let output = [...schedules];
+const sortByTitle = (schedules: Schedule[], displayInfo: Record<string, ScheduleDisplayInfo>) => {
+  const output = [...schedules];
   output.sort((a, b) => {
     if (!displayInfo[a.schedule_id!]) return displayInfo[b.schedule_id!] ? 1 : -1;
-    let titleA = displayInfo[a.schedule_id!].primaryInfo.join('');
-    let titleB = displayInfo[b.schedule_id!].primaryInfo.join('');
+    const titleA = displayInfo[a.schedule_id!].primaryInfo.join('');
+    const titleB = displayInfo[b.schedule_id!].primaryInfo.join('');
     return sortAlphabetically(titleA, titleB);
   });
   return output;
 };
 
-let sortByState = (schedules: Schedule[], hass: HomeAssistant, expiredSchedulesLast: boolean) => {
-  let output = [...schedules];
+const sortByState = (schedules: Schedule[], hass: HomeAssistant, expiredSchedulesLast: boolean) => {
+  const output = [...schedules];
 
   output.sort((a, b) => {
-    let stateA = hass.states[a.entity_id]?.state;
-    let stateB = hass.states[b.entity_id]?.state;
+    const stateA = hass.states[a.entity_id]?.state;
+    const stateB = hass.states[b.entity_id]?.state;
 
-    let scheduleA_active = ['on', 'triggered'].includes(stateA);
-    let scheduleB_active = ['on', 'triggered'].includes(stateB);
+    const scheduleA_active = ['on', 'triggered'].includes(stateA);
+    const scheduleB_active = ['on', 'triggered'].includes(stateB);
 
     if (scheduleA_active && !scheduleB_active) return -1;
     else if (!scheduleA_active && scheduleB_active) return 1;
@@ -119,7 +119,7 @@ let sortByState = (schedules: Schedule[], hass: HomeAssistant, expiredSchedulesL
 };
 
 //check whether entities and tags of schedule are included in configuration
-let isIncluded = (schedule: Schedule, config: CardConfig) => {
+const isIncluded = (schedule: Schedule, config: CardConfig) => {
   if (
     !schedule.timeslots.every(timeslot =>
       timeslot.actions.every(action => entityFilter(action.entity_id || action.service, config))
@@ -127,10 +127,10 @@ let isIncluded = (schedule: Schedule, config: CardConfig) => {
   )
     return false;
 
-  let included = true;
+  const included = true;
 
   //filter items by tags
-  let filters = AsArray(config.tags);
+  const filters = AsArray(config.tags);
   if (filters.length) {
     included = false;
     if ((schedule.tags || []).some(e => filters.includes(e))) included = true;
@@ -140,7 +140,7 @@ let isIncluded = (schedule: Schedule, config: CardConfig) => {
   }
 
   //filter items by exclude_tags
-  let excludeFilters = AsArray(config.exclude_tags);
+  const excludeFilters = AsArray(config.exclude_tags);
   if (excludeFilters.length && included) {
     if ((schedule.tags || []).some(e => excludeFilters.includes(e))) included = false;
     else if (excludeFilters.includes('none') && !schedule.tags?.length) included = false;
@@ -151,14 +151,14 @@ let isIncluded = (schedule: Schedule, config: CardConfig) => {
 };
 
 //check whether entities and tags of schedule are included in configuration OR they should be discovered
-let isIncludedOrExcluded = (schedule: Schedule, config: CardConfig) => {
+const isIncludedOrExcluded = (schedule: Schedule, config: CardConfig) => {
   if (config.discover_existing) return true;
   else if (!schedule) return false;
   else return isIncluded(schedule, config);
 };
 
-let getScheduleDisplayInfo = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
-  let info: ScheduleDisplayInfo = {
+const getScheduleDisplayInfo = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+  const info: ScheduleDisplayInfo = {
     primaryInfo: computeScheduleHeader(schedule, config, hass),
     secondaryInfo: computeScheduleInfo(schedule, config, hass),
     icon: computeScheduleIcon(schedule, config, hass),
@@ -198,11 +198,11 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   }
 
   firstUpdated() {
-    let hass = this.hass!;
+    const hass = this.hass!;
     if (hass.localize('ui.panel.config.automation.editor.actions.type.device_id.action'))
       this.translationsLoaded = true;
     else {
-      let el = document.querySelector('home-assistant') as HTMLElement & { _loadFragmentTranslations: any };
+      const el = document.querySelector('home-assistant') as HTMLElement & { _loadFragmentTranslations: any };
       el._loadFragmentTranslations(hass.language, 'config').then(() => {
         this.hass!.localize;
       });
@@ -220,8 +220,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
       return;
     }
     fetchScheduleItem(this.hass!, ev.schedule_id).then(schedule => {
-      let oldSchedule = this.schedules?.find(e => e.schedule_id == ev.schedule_id);
-      let schedules = [...(this.schedules || [])];
+      const oldSchedule = this.schedules?.find(e => e.schedule_id == ev.schedule_id);
+      const schedules = [...(this.schedules || [])];
       try {
         this.scheduleDisplayInfo = {
           ...this.scheduleDisplayInfo,
@@ -252,8 +252,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
     //load all schedules
     fetchSchedules(this.hass!)
       .then(res => {
-        let schedules = res.filter(e => isIncludedOrExcluded(e, this._config!));
-        let scheduleInfo: Record<string, ScheduleDisplayInfo> = {};
+        const schedules = res.filter(e => isIncludedOrExcluded(e, this._config!));
+        const scheduleInfo: Record<string, ScheduleDisplayInfo> = {};
         Object.keys(schedules).forEach(e => {
           try {
             scheduleInfo = {
@@ -272,15 +272,15 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
-    let oldHass = changedProps.get('hass') as HomeAssistant | undefined;
-    let oldConfig = changedProps.get('_config') as CardConfig | undefined;
+    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
+    const oldConfig = changedProps.get('_config') as CardConfig | undefined;
     if (oldHass && changedProps.size == 1 && !this.translationsLoaded) {
       if (!oldHass.localize('ui.panel.config.automation.editor.actions.type.device_id.action')) {
         this.translationsLoaded = true;
       }
     }
     if (oldConfig && this._config) {
-      let changedKeys = Object.keys(oldConfig).filter(e => oldConfig[e] !== this._config![e]);
+      const changedKeys = Object.keys(oldConfig).filter(e => oldConfig[e] !== this._config![e]);
       if (changedKeys.some(e => ['tags', 'discover_existing', 'sort_by', 'display_options'].includes(e)))
         (async () => await this.loadSchedules())();
     }
@@ -293,7 +293,7 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
 
   setConfig(userConfig: Partial<CardConfig>) {
     ValidateConfig(userConfig);
-    let config: CardConfig = {
+    const config: CardConfig = {
       ...DefaultCardConfig,
       ...userConfig,
     };
@@ -302,13 +302,13 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
 
   public async getCardSize() {
     return new Promise(res => {
-      let retries = 0;
-      let wait = setInterval(() => {
+      const retries = 0;
+      const wait = setInterval(() => {
         retries++;
         if (!this._config || (!this.schedules && !this.connectionError && retries < 50)) return;
-        let cardSize = this._config!.title || this._config!.show_header_toggle ? 3 : 1;
+        const cardSize = this._config!.title || this._config!.show_header_toggle ? 3 : 1;
         if (this._config.show_add_button) cardSize += 1;
-        let rowSize = ((AsArray(this._config.display_options.secondary_info || []).length || 2) + 1) / 2;
+        const rowSize = ((AsArray(this._config.display_options.secondary_info || []).length || 2) + 1) / 2;
         if (this.schedules)
           cardSize += this.showDiscovered
             ? this.schedules.length * rowSize
@@ -379,8 +379,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
       `;
     }
 
-    let includedSchedules: Schedule[] = this.schedules.filter(e => isIncluded(e, this._config!));
-    let excludedEntities: Schedule[] = this.schedules.filter(e => !isIncluded(e, this._config!));
+    const includedSchedules: Schedule[] = this.schedules.filter(e => isIncluded(e, this._config!));
+    const excludedEntities: Schedule[] = this.schedules.filter(e => !isIncluded(e, this._config!));
 
     return html`
       ${includedSchedules.map(schedule => this.renderScheduleRow(schedule))}
@@ -441,8 +441,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
           `;
     }
 
-    let displayInfo = this.scheduleDisplayInfo[schedule.schedule_id!];
-    let state = this.hass!.states[schedule.entity_id]?.state || '';
+    const displayInfo = this.scheduleDisplayInfo[schedule.schedule_id!];
+    const state = this.hass!.states[schedule.entity_id]?.state || '';
 
     return html`
       <div class="schedule-row ${['on', 'triggered'].includes(state) ? '' : 'disabled'}">
@@ -470,8 +470,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   }
 
   renderDisplayItems(schedule: Schedule, displayItem: string[]) {
-    let replaceReservedTags = (input: string) => {
-      let parts = input.split('<my-relative-time></my-relative-time>');
+    const replaceReservedTags = (input: string) => {
+      const parts = input.split('<my-relative-time></my-relative-time>');
       if (parts.length > 1)
         return html`
           ${parts[0] ? unsafeHTML(parts[0]) : ''}
@@ -480,12 +480,12 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
           ${parts[1] ? unsafeHTML(parts[1]) : ''}
         `;
 
-      let parts2 = input.split(/(<tag>[^<]*<\/tag>)/g);
+      const parts2 = input.split(/(<tag>[^<]*<\/tag>)/g);
       if (parts2.length > 1)
         return parts2
           .filter(e => e.length)
           .map(e => {
-            let res = e.match(/<tag>([^<]*)<\/tag>/g);
+            const res = e.match(/<tag>([^<]*)<\/tag>/g);
             return res ? unsafeHTML(`<span class="filter-tag">${res[0]}</span>`) : e;
           });
       return unsafeHTML(input);
@@ -500,11 +500,11 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   }
 
   sortSchedules(schedules: Schedule[]) {
-    let sortingOptions = AsArray(this._config?.sort_by);
+    const sortingOptions = AsArray(this._config?.sort_by);
     if (sortingOptions.includes('relative-time')) schedules = sortByRelativeTime(schedules);
     if (sortingOptions.includes('title')) schedules = sortByTitle(schedules, this.scheduleDisplayInfo);
     if (sortingOptions.includes('state')) {
-      let expiredSchedulesLast = sortingOptions.includes('relative-time');
+      const expiredSchedulesLast = sortingOptions.includes('relative-time');
       schedules = sortByState(schedules, this.hass!, expiredSchedulesLast);
     }
     return schedules;
@@ -513,14 +513,14 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   toggleDisabled(ev: Event, entity_id: string) {
     if (!this.hass || !entity_id) return;
     ev.stopPropagation();
-    let checked = !(ev.target as HTMLInputElement).checked;
+    const checked = !(ev.target as HTMLInputElement).checked;
     this.hass.callService('switch', checked ? 'turn_on' : 'turn_off', { entity_id: entity_id });
   }
 
   toggleDisableAll(ev: Event) {
     if (!this.hass || !this.schedules) return;
-    let checked = (ev.target as HTMLInputElement).checked;
-    let items = this.schedules.filter(e =>
+    const checked = (ev.target as HTMLInputElement).checked;
+    const items = this.schedules.filter(e =>
       this.showDiscovered ? isIncludedOrExcluded(e, this._config!) : isIncluded(e, this._config!)
     );
     items.forEach(el => {
@@ -530,7 +530,7 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
 
   computeHeaderToggleState() {
     if (!this.schedules) return false;
-    let items = this.schedules.filter(e =>
+    const items = this.schedules.filter(e =>
       this.showDiscovered ? isIncludedOrExcluded(e, this._config!) : isIncluded(e, this._config!)
     );
     return items.some(el => ['on', 'triggered'].includes(this.hass!.states[el.entity_id]?.state || ''));
@@ -553,19 +553,19 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
   async _editItemClick(editItem: string) {
     if (!this.hass || !this._config) return;
 
-    let data = await fetchScheduleItem(this.hass, editItem);
+    const data = await fetchScheduleItem(this.hass, editItem);
     if (!data) return;
-    let entityIds = unique(flatten(data.timeslots.map(e => e.actions.map(e => e.entity_id || e.service))));
-    let entities = entityIds.map(e => parseEntity(e, this.hass!, this._config!));
-    let actions = computeActions(entityIds, this.hass, this._config);
-    let usedActions = unique(flatten(data.timeslots.map(e => e.actions)));
-    let extraActions = usedActions.filter(e => !actions.some(a => compareActions(a, e, true)));
+    const entityIds = unique(flatten(data.timeslots.map(e => e.actions.map(e => e.entity_id || e.service))));
+    const entities = entityIds.map(e => parseEntity(e, this.hass!, this._config!));
+    const actions = computeActions(entityIds, this.hass, this._config);
+    const usedActions = unique(flatten(data.timeslots.map(e => e.actions)));
+    const extraActions = usedActions.filter(e => !actions.some(a => compareActions(a, e, true)));
     if (extraActions.length) {
       //actions that are not in the card
       unique(extraActions).forEach(e => actions.push(importAction(e, this.hass!)));
     }
 
-    let schedule: ScheduleConfig = {
+    const schedule: ScheduleConfig = {
       weekdays: data.weekdays,
       timeslots: data.timeslots,
       repeat_type: data.repeat_type,
@@ -576,8 +576,8 @@ export class SchedulerCard extends SubscribeMixin(LitElement) {
     };
 
     if (!entities.length || !schedule.timeslots.length) {
-      let result = await new Promise(resolve => {
-        let params: DialogParams = {
+      const result = await new Promise(resolve => {
+        const params: DialogParams = {
           title: 'Defective entity',
           description:
             'This schedule is defective and cannot be edited with the card. Consider to delete the item and recreate it. If the problem persists, please report the issue on GitHub.',
