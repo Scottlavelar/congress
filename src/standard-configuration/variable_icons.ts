@@ -1,6 +1,6 @@
 type IconList = Record<string, Record<string, Record<string, string>>>;
 
-let actionIcons: IconList = {
+const actionIcons: IconList = {
   climate: {
     hvac_mode: {
       off: 'mdi:power-off',
@@ -62,7 +62,7 @@ let actionIcons: IconList = {
   },
 };
 
-export let getVariableOptionIcon = (domain: string, variable: string, option: string) => {
+export const getVariableOptionIcon = (domain: string, variable: string, option: string) => {
   if (domain in actionIcons && variable in actionIcons[domain] && option in actionIcons[domain][variable])
     return actionIcons[domain][variable][option];
   return;
