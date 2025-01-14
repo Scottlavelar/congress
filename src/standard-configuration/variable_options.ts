@@ -2,7 +2,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 
 type IconList = Record<string, Record<string, Record<string, string>>>;
 
-export let variableOptions: IconList = {
+export const variableOptions: IconList = {
   climate: {
     hvac_mode: {
       off: 'component.climate.entity_component._.state.off',
@@ -63,13 +63,13 @@ export let variableOptions: IconList = {
   },
 };
 
-export let getVariableOptions = (domain: string, variable: string) => {
+export const getVariableOptions = (domain: string, variable: string) => {
   if (domain in variableOptions && variable in variableOptions[domain])
     return Object.keys(variableOptions[domain][variable]);
   return [];
 };
 
-export let getVariableOptionName = (domain: string, variable: string, option: string, hass: HomeAssistant) => {
+export const getVariableOptionName = (domain: string, variable: string, option: string, hass: HomeAssistant) => {
   if (domain in variableOptions && variable in variableOptions[domain] && option in variableOptions[domain][variable])
     return hass.localize(variableOptions[domain][variable][option]);
   return option;
