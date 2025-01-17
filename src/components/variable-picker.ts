@@ -32,14 +32,14 @@ export class SchedulerVariablePicker extends LitElement {
   }
 
   private levelVariableUpdated(ev: CustomEvent | number) {
-    let value = typeof ev == 'number' ? ev : Number(ev.detail.value);
+    const value = typeof ev == 'number' ? ev : Number(ev.detail.value);
     this.value = value;
     fireEvent(this, 'value-changed', { value: value });
   }
 
   renderLevelVariable() {
-    let variable = this.variable as LevelVariable;
-    let value = Number(this.value);
+    const variable = this.variable as LevelVariable;
+    const value = Number(this.value);
 
     return html`
       <variable-slider
@@ -58,15 +58,15 @@ export class SchedulerVariablePicker extends LitElement {
   }
 
   private listVariableUpdated(ev: Event | string) {
-    let value = typeof ev == 'string' ? ev : String((ev.target as HTMLInputElement).value);
+    const value = typeof ev == 'string' ? ev : String((ev.target as HTMLInputElement).value);
     this.value = value;
     fireEvent(this, 'value-changed', { value: value });
   }
 
   renderListVariable() {
-    let variable = this.variable as ListVariable;
-    let options = variable.options;
-    let value = String(this.value) || null;
+    const variable = this.variable as ListVariable;
+    const options = variable.options;
+    const value = String(this.value) || null;
     if (options.length == 1 && value != options[0].value) this.listVariableUpdated(options[0].value);
 
     return html`
@@ -75,8 +75,8 @@ export class SchedulerVariablePicker extends LitElement {
   }
 
   renderTextVariable() {
-    let variable = this.variable as TextVariable;
-    let value = this.value;
+    const variable = this.variable as TextVariable;
+    const value = this.value;
 
     return html`
       <ha-textfield .value=${value || ''} @input=${this.listVariableUpdated} .label=${variable.name}> </ha-textfield>
