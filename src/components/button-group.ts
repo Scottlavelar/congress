@@ -39,8 +39,8 @@ export class ButtonGroup extends LitElement {
   }
 
   renderButton(item: ButtonItem, index: number) {
-    var selection = Array.isArray(this.value) ? this.value : [this.value];
-    var id = value(item, index);
+    const selection = Array.isArray(this.value) ? this.value : [this.value];
+    const id = value(item, index);
 
     return html`
       <mwc-button
@@ -75,12 +75,12 @@ export class ButtonGroup extends LitElement {
       this.value = value;
     }
 
-    var selection = Array.isArray(this.value)
+    const selection = Array.isArray(this.value)
       ? this.value.map(e => this.items.find((v, k) => value(v, k) == e))
       : this.value !== null
       ? this.items.find((v, k) => value(v, k) == this.value)
       : null;
-    var myEvent = new CustomEvent('change', { detail: selection });
+    const myEvent = new CustomEvent('change', { detail: selection });
     this.dispatchEvent(myEvent);
   }
 
