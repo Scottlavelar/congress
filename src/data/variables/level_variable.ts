@@ -4,21 +4,21 @@ import { LevelVariable, EVariableType } from '../../types';
 export function levelVariable(...config: Partial<LevelVariable>[]) {
   //factory function to create LevelVariable from configuration
 
-  var min = config.map(e => e.min).filter(isDefined);
-  var max = config.map(e => e.max).filter(isDefined);
-  var step = config.map(e => e.step).filter(isDefined);
-  var scale_factor = unique(config.map(e => e.scale_factor).filter(isDefined));
-  var optional = config.map(e => e.optional).filter(isDefined);
-  var unit = config.map(e => e.unit).filter(isDefined);
-  var name = config.map(e => e.name).filter(isDefined);
+  const min = config.map(e => e.min).filter(isDefined);
+  const max = config.map(e => e.max).filter(isDefined);
+  const step = config.map(e => e.step).filter(isDefined);
+  const scale_factor = unique(config.map(e => e.scale_factor).filter(isDefined));
+  const optional = config.map(e => e.optional).filter(isDefined);
+  const unit = config.map(e => e.unit).filter(isDefined);
+  const name = config.map(e => e.name).filter(isDefined);
 
-  var stepSize = step.length ? Math.max(...step) : 1;
-  var round = (val: number) => {
+  const stepSize = step.length ? Math.max(...step) : 1;
+  const round = (val: number) => {
     val = Math.round(val / stepSize) * stepSize;
     return parseFloat(val.toPrecision(12));
   };
 
-  var variable: LevelVariable = {
+  const variable: LevelVariable = {
     type: EVariableType.Level,
     min: round(min.length ? Math.min(...min) : 0),
     max: round(max.length ? Math.max(...max) : 255),
