@@ -1,13 +1,13 @@
 import { computeDomain, computeEntity } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
-import { DefaultActionIcon } from '../var';
+import { DefaultActionIcon } from '../const';
 
 type IconItem = string | ((action: string, stateObj?: HassEntity) => string);
 
 type IconList = Record<string, Record<string, IconItem>>;
 
-var coverIcon = (action: string, stateObj?: HassEntity) => {
-  var closedState = action == 'close';
+const coverIcon = (action: string, stateObj?: HassEntity) => {
+  const closedState = action == 'close';
   switch (stateObj?.attributes.device_class) {
     case 'garage':
       return closedState ? 'mdi:garage' : 'mdi:garage-open';
@@ -22,7 +22,7 @@ var coverIcon = (action: string, stateObj?: HassEntity) => {
   }
 };
 
-var actionIcons: IconList = {
+const actionIcons: IconList = {
   alarm_control_panel: {
     alarm_disarm: 'mdi:lock-open-variant-outline',
     alarm_arm_home: 'mdi:home-outline',
@@ -135,7 +135,7 @@ var actionIcons: IconList = {
   },
 };
 
-export var actionIcon = (domain: string, action: string, stateObj: HassEntity | undefined): string | undefined => {
+export const actionIcon = (domain: string, action: string, stateObj: HassEntity | undefined): string | undefined => {
   if (domain in actionIcons && action in actionIcons[domain]) {
     let item = actionIcons[domain][action];
     if (item instanceof Function) {
