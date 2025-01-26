@@ -12,10 +12,10 @@ export interface FrontendLocaleData extends FrontendTranslationData {
   time_format?: TimeFormat;
 }
 
-export const formatAmPm = (locale: FrontendLocaleData): boolean => {
+export let formatAmPm = (locale: FrontendLocaleData): boolean => {
   if (locale.time_format === TimeFormat.language || locale.time_format === TimeFormat.system) {
-    const testLanguage = locale.time_format === TimeFormat.language ? locale.language : undefined;
-    const test = new Date().toLocaleString(testLanguage);
+    let testLanguage = locale.time_format === TimeFormat.language ? locale.language : undefined;
+    let test = new Date().toLocaleString(testLanguage);
     return test.includes('AM') || test.includes('PM');
   }
   return locale.time_format === TimeFormat.am_pm;
@@ -26,7 +26,7 @@ export function formatTime(
   locale: FrontendLocaleData,
   formatOption?: TimeFormat.am_pm | TimeFormat.twenty_four
 ) {
-  const supportLocaleString = () => {
+  let supportLocaleString = () => {
     try {
       new Date().toLocaleTimeString('i');
     } catch (e) {
