@@ -5,18 +5,18 @@ import { PrettyPrintName } from '../../helpers';
 import { listVariableDisplay } from '../variables/list_variable';
 import { textVariableDisplay } from '../variables/text_variable';
 
-var wildcardPattern = /\{([^\}]+)\}/;
-var parameterPattern = /\[([^\]]+)\]/;
-var MAX_RECURSION_DEPTH = 100;
+const wildcardPattern = /\{([^\}]+)\}/;
+const parameterPattern = /\[([^\]]+)\]/;
+const MAX_RECURSION_DEPTH = 100;
 
 export function computeActionDisplay(action: Action) {
   let name = action.name;
   if (!name) name = PrettyPrintName(computeEntity(action.service));
 
-  var replaceWildcards = (string: string, recursionDepth = 0): string => {
-    var res = wildcardPattern.exec(string);
+  const replaceWildcards = (string: string, recursionDepth = 0): string => {
+    const res = wildcardPattern.exec(string);
     if (!res) return string;
-    var field = res[1];
+    const field = res[1];
 
     if (!Object.keys(action.service_data || {}).includes(field)) return string.replace(res[0], '');
 
@@ -35,12 +35,12 @@ export function computeActionDisplay(action: Action) {
     return replaceWildcards(string);
   };
 
-  var replaceSubstrings = (string: string, recursionDepth = 0): string => {
-    var res = parameterPattern.exec(string);
+  const replaceSubstrings = (string: string, recursionDepth = 0): string => {
+    const res = parameterPattern.exec(string);
     if (!res) return string;
 
-    var field = res[1].match(wildcardPattern)![1];
-    var hasWildcard = Object.keys(action.service_data || {}).includes(field);
+    const field = res[1].match(wildcardPattern)![1];
+    const hasWildcard = Object.keys(action.service_data || {}).includes(field);
     if (hasWildcard) string = string.replace(res[0], replaceWildcards(res[1]));
     else string = string.replace(res[0], '');
     if (recursionDepth >= MAX_RECURSION_DEPTH) return string;
