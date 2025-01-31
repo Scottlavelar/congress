@@ -4,33 +4,33 @@ import { html, TemplateResult } from 'lit';
 import { DialogParams } from '../components/generic-dialog';
 import { ProvideHassElement, showDialog } from './custom_dialog';
 
-export let fetchSchedules = (hass: HomeAssistant): Promise<Schedule[]> =>
+export const fetchSchedules = (hass: HomeAssistant): Promise<Schedule[]> =>
   hass.callWS({
     type: 'scheduler',
   });
 
-export let fetchScheduleItem = (hass: HomeAssistant, schedule_id: string): Promise<Schedule> =>
+export const fetchScheduleItem = (hass: HomeAssistant, schedule_id: string): Promise<Schedule> =>
   hass.callWS({
     type: 'scheduler/item',
     schedule_id: schedule_id,
   });
 
-export let saveSchedule = (hass: HomeAssistant, config: ScheduleConfig): Promise<boolean> => {
+export const saveSchedule = (hass: HomeAssistant, config: ScheduleConfig): Promise<boolean> => {
   return hass.callApi('POST', 'scheduler/add', config);
 };
 
-export let editSchedule = (
+export const editSchedule = (
   hass: HomeAssistant,
   config: ScheduleConfig & { schedule_id: string }
 ): Promise<boolean> => {
   return hass.callApi('POST', 'scheduler/edit', config);
 };
 
-export let deleteSchedule = (hass: HomeAssistant, schedule_id: string): Promise<boolean> => {
+export const deleteSchedule = (hass: HomeAssistant, schedule_id: string): Promise<boolean> => {
   return hass.callApi('POST', 'scheduler/remove', { schedule_id: schedule_id });
 };
 
-export let fetchTags = (hass: HomeAssistant): Promise<TagEntry[]> =>
+export const fetchTags = (hass: HomeAssistant): Promise<TagEntry[]> =>
   hass.callWS({
     type: 'scheduler/tags',
   });
@@ -41,7 +41,7 @@ export function showErrorDialog(
   hass: HomeAssistant,
   useAlternativeDialog?: boolean
 ) {
-  let params: DialogParams = {
+  const params: DialogParams = {
     title: hass.localize('state_badge.default.error'),
     description: error,
     primaryButtonLabel: hass.localize('ui.common.ok'),
@@ -65,7 +65,7 @@ export function handleError(
   hass: HomeAssistant,
   useAlternativeDialog?: boolean
 ) {
-  let errorMessage = html`
+  const errorMessage = html`
     <b>Something went wrong!</b><br />
     ${err.body.message}<br /><br />
     ${err.error}<br /><br />
