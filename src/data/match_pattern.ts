@@ -1,7 +1,7 @@
 import { computeDomain } from 'custom-card-helpers';
 
 export function matchPattern(pattern: string, value: string) {
-  const res = false;
+  let res = false;
   if (pattern.match(/^[a-z0-9_\.]+$/)) {
     res = !pattern.includes('.') && value.includes('.') ? pattern == computeDomain(value) : pattern == value;
   } else {
