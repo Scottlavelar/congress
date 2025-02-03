@@ -1,17 +1,17 @@
 import { computeDomain, computeEntity, HomeAssistant, stateIcon as HaStateIcon } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
-import { DefaultEntityIcon } from '../let';
+import { DefaultEntityIcon } from '../const';
 
 type Template = (stateObj: HassEntity, state: string, hass: HomeAssistant) => string;
 type IconItem = string | Template;
 type IconList = Record<string, Record<string, IconItem> | Template>;
 
-let binarySensorIcon = (stateObj: HassEntity, state: string) => {
+const binarySensorIcon = (stateObj: HassEntity, state: string) => {
   return HaStateIcon({ ...stateObj, state: state });
 };
 
-let coverIcon = (stateObj: HassEntity, state: string) => {
-  let closedState = state == 'closed';
+const coverIcon = (stateObj: HassEntity, state: string) => {
+  const closedState = state == 'closed';
   switch (stateObj.attributes.device_class) {
     case 'garage':
       return closedState ? 'mdi:garage' : 'mdi:garage-open';
@@ -26,8 +26,8 @@ let coverIcon = (stateObj: HassEntity, state: string) => {
   }
 };
 
-let personIcon = (_stateObj: HassEntity, state: string, hass: HomeAssistant) => {
-  let stateIcons: Record<string, string> = {
+const personIcon = (_stateObj: HassEntity, state: string, hass: HomeAssistant) => {
+  const stateIcons: Record<string, string> = {
     home: 'mdi:home-outline',
     not_home: 'mdi:exit-run',
   };
@@ -35,8 +35,8 @@ let personIcon = (_stateObj: HassEntity, state: string, hass: HomeAssistant) => 
   Object.keys(hass.states)
     .filter(e => computeDomain(e) == 'zone')
     .forEach(e => {
-      let name = computeEntity(e);
-      let icon = hass.states[e].attributes.icon;
+      const name = computeEntity(e);
+      const icon = hass.states[e].attributes.icon;
       if (!icon) return;
       stateIcons[name] = icon;
     });
@@ -44,7 +44,7 @@ let personIcon = (_stateObj: HassEntity, state: string, hass: HomeAssistant) => 
   return state in stateIcons ? stateIcons[state] : 'mdi:flash';
 };
 
-export let stateIcons: IconList = {
+export const stateIcons: IconList = {
   alarm_control_panel: {
     disarmed: 'mdi:lock-open-variant-outline',
     armed_away: 'mdi:exit-run',
@@ -116,13 +116,13 @@ export let stateIcons: IconList = {
   },
 };
 
-export let stateIcon = (stateObj: HassEntity, state: string | undefined, hass: HomeAssistant, fallback?: string) => {
-  let domain = computeDomain(stateObj.entity_id);
+export const stateIcon = (stateObj: HassEntity, state: string | undefined, hass: HomeAssistant, fallback?: string) => {
+  const domain = computeDomain(stateObj.entity_id);
   if (!state) state = stateObj.state;
 
   if (domain in stateIcons) {
     if (state in stateIcons[domain]) {
-      let entry = stateIcons[domain][state];
+      const entry = stateIcons[domain][state];
       return typeof entry == 'string' ? entry : entry(stateObj, state, hass);
     } else if (typeof stateIcons[domain] == 'function') {
       return (stateIcons[domain] as Template)(stateObj, state, hass);
