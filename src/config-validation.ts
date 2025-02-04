@@ -1,38 +1,38 @@
 export function ValidateConfig(config: any) {
-  var errors: string[] = [];
+  const errors: string[] = [];
   let tree: string[] = [];
 
-  var addError = (err: string | undefined) => {
+  const addError = (err: string | undefined) => {
     if (!err) return;
     errors.push(tree.length ? `in ${tree.join('->')}: ${err}` : err);
   };
 
-  var Has = (object: Record<string, any>, key: string) => {
+  const Has = (object: Record<string, any>, key: string) => {
     return object.hasOwnProperty(key);
   };
 
-  var Type = (input: any, type: string | string[]) => {
+  const Type = (input: any, type: string | string[]) => {
     if (Array.isArray(type)) return type.some(e => Type(input, e));
     else if (type == 'array') return Array.isArray(input);
     else if (type == 'object') return typeof input === type && input !== null;
     else return typeof input === type;
   };
 
-  var Required = (obj: Record<string, any>, key: string, type: string | string[]) => {
+  const Required = (obj: Record<string, any>, key: string, type: string | string[]) => {
     if (!Has(obj, key)) addError(`missing required property '${key}'`);
     else {
-      var res = Type(obj[key], type);
+      const res = Type(obj[key], type);
       if (!res) addError(`'${key}' must be of type ${type}`);
     }
   };
 
-  var Optional = (obj: Record<string, any>, key: string, type: string | string[]) => {
+  const Optional = (obj: Record<string, any>, key: string, type: string | string[]) => {
     if (!Has(obj, key)) return;
-    var res = Type(obj[key], type);
+    const res = Type(obj[key], type);
     if (!res) addError(`'${key}' must be of type ${type}`);
   };
 
-  var RequiredArrayType = (obj: Record<string, any>, key: string, type: string | string[]) => {
+  const RequiredArrayType = (obj: Record<string, any>, key: string, type: string | string[]) => {
     let res = true;
     if (Has(obj, key) && Type(obj[key], 'array')) {
       if (obj[key].some(e => !Type(e, type))) {
@@ -45,8 +45,8 @@ export function ValidateConfig(config: any) {
     return res;
   };
 
-  var validateActionConfig = (action: any) => {
-    var baseTree = tree;
+  const validateActionConfig = (action: any) => {
+    const baseTree = tree;
     Optional(action, 'name', 'string');
     Optional(action, 'icon', 'string');
     Required(action, 'service', 'string');
@@ -65,7 +65,7 @@ export function ValidateConfig(config: any) {
         Required(action.variables, key, 'object');
         if (Has(action.variables, key) && Type(action.variables[key], 'object')) {
           tree.push(key);
-          var variableCfg = action.variables[key] as { options?: any; min?: any; max?: any };
+          const variableCfg = action.variables[key] as { options?: any; min?: any; max?: any };
 
           //list variable
           if (RequiredArrayType(variableCfg, 'options', 'object')) {
@@ -143,7 +143,7 @@ export function ValidateConfig(config: any) {
       Required(config.customize, key, 'object');
       if (Has(config.customize, key) && Type(config.customize[key], 'object')) {
         tree.push(key);
-        var entryObj = config.customize[key] as { actions?: any; states?: any };
+        const entryObj = config.customize[key] as { actions?: any; states?: any };
         Optional(entryObj, 'name', 'string');
         Optional(entryObj, 'icon', 'string');
         Optional(entryObj, 'actions', 'array');
