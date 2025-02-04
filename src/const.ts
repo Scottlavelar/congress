@@ -1,19 +1,19 @@
 import { CardConfig } from './types';
 
-export const CARD_VERSION = 'v3.2.14';
+export let CARD_VERSION = 'v3.2.14';
 
-export const DefaultTimeStep = 10;
+export let DefaultTimeStep = 10;
 
-export const DefaultGroupIcon = 'folder-outline';
-export const DefaultEntityIcon = 'folder-outline';
-export const DefaultActionIcon = 'flash';
-export const DeadEntityName = '(unknown entity)';
-export const DeadEntityIcon = 'help-circle-outline';
+export let DefaultGroupIcon = 'folder-outline';
+export let DefaultEntityIcon = 'folder-outline';
+export let DefaultActionIcon = 'flash';
+export let DeadEntityName = '(unknown entity)';
+export let DeadEntityIcon = 'help-circle-outline';
 
-export const FieldTemperature = 'temperature';
-export const WorkdaySensor = 'binary_sensor.workday_sensor';
+export let FieldTemperature = 'temperature';
+export let WorkdaySensor = 'binary_sensor.workday_sensor';
 
-export const NotifyDomain = 'notify';
+export let NotifyDomain = 'notify';
 
 export enum ETabOptions {
   Entity = 'entity',
@@ -21,7 +21,7 @@ export enum ETabOptions {
   Options = 'options',
 }
 
-export const DefaultCardConfig: CardConfig = {
+export let DefaultCardConfig: CardConfig = {
   type: 'scheduler-card',
   discover_existing: true,
   standard_configuration: true,
@@ -41,4 +41,4 @@ export const DefaultCardConfig: CardConfig = {
   sort_by: ['relative-time', 'state'],
 };
 
-export const WebsocketEvent = 'scheduler_updated';
+export let WebsocketEvent = 'scheduler_updated';
