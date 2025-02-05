@@ -1,6 +1,6 @@
 import { computeDomain, computeStateDisplay, HomeAssistant } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
-import { DefaultActionIcon } from '../var';
+import { DefaultActionIcon } from '../const';
 import { levelVariable } from '../data/variables/level_variable';
 import { listVariable } from '../data/variables/list_variable';
 import { textVariable } from '../data/variables/text_variable';
@@ -14,15 +14,15 @@ import { stateIcon } from './state_icons';
 import { parseVariable } from './variables';
 
 export function standardStates(entity_id: string, hass: HomeAssistant): Variable | null {
-  var domain = computeDomain(entity_id);
-  var stateObj: HassEntity | undefined = hass.states[entity_id];
+  const domain = computeDomain(entity_id);
+  const stateObj: HassEntity | undefined = hass.states[entity_id];
   if (!stateObj) return null;
 
   if (domain == 'group') {
-    var stateObj = hass.states[entity_id];
-    var subEntities = listAttribute(stateObj, 'entity_id');
+    const stateObj = hass.states[entity_id];
+    const subEntities = listAttribute(stateObj, 'entity_id');
     if (!subEntities.length) return null;
-    var subStates = subEntities.map(e => standardStates(e, hass));
+    const subStates = subEntities.map(e => standardStates(e, hass));
     return subStates.every(isDefined) ? groupStates(hass, stateObj, subStates as Variable[]) : null;
   }
 
@@ -48,8 +48,8 @@ export function standardStates(entity_id: string, hass: HomeAssistant): Variable
   }
 }
 
-var getStateName = (stateObj: HassEntity, state: string, hass: HomeAssistant) => {
-  var domain = computeDomain(stateObj.entity_id);
+const getStateName = (stateObj: HassEntity, state: string, hass: HomeAssistant) => {
+  const domain = computeDomain(stateObj.entity_id);
   return (
     (stateObj.attributes.device_class &&
       hass.localize(`component.${domain}.entity_component._.${stateObj.attributes.device_class}.state.${state}`)) ||
