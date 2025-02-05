@@ -96,9 +96,9 @@ export class VariableSlider extends LitElement {
   }
 
   toggleChecked(e: Event) {
-    var checked = (e.target as HTMLInputElement).checked;
+    const checked = (e.target as HTMLInputElement).checked;
     this.disabled = !checked;
-    var value = this.disabled ? null : this._scaledValue(this._displayedValue);
+    const value = this.disabled ? null : this._scaledValue(this._displayedValue);
     fireEvent(this, 'value-changed', { value: value });
   }
 
