@@ -3,10 +3,10 @@ import { standardIcon } from '../../standard-configuration/standardIcon';
 import { matchPattern } from '../match_pattern';
 import { pick } from '../../helpers';
 import { HomeAssistant, computeEntity, computeDomain } from 'custom-card-helpers';
-import { DeadEntityIcon, DeadEntityName, DefaultEntityIcon, NotifyDomain } from '../../const';
+import { DeadEntityIcon, DeadEntityName, DefaultEntityIcon, NotifyDomain } from '../../var';
 
 export function parseEntity(entity_id: string, hass: HomeAssistant, config: Partial<CardConfig>) {
-  const stateObj = entity_id in hass.states ? hass.states[entity_id] : undefined;
+  var stateObj = entity_id in hass.states ? hass.states[entity_id] : undefined;
 
   let entity: EntityElement = {
     id: entity_id,
@@ -20,7 +20,7 @@ export function parseEntity(entity_id: string, hass: HomeAssistant, config: Part
     if (name.includes('mobile_app_')) {
       name = name.split('mobile_app_').pop()!;
       if (`device_tracker.${name}` in hass.states) {
-        const deviceTracker = hass.states[`device_tracker.${name}`];
+        var deviceTracker = hass.states[`device_tracker.${name}`];
         name = deviceTracker.attributes.friendly_name || name;
         icon = 'hass:cellphone-text';
       }
@@ -39,7 +39,7 @@ export function parseEntity(entity_id: string, hass: HomeAssistant, config: Part
   }
 
   if (config.customize) {
-    const customize = Object.entries(config.customize)
+    var customize = Object.entries(config.customize)
       .filter(([pattern]) => matchPattern(pattern, entity.id))
       .sort((a, b) => b[0].length - a[0].length)
       .map(([, v]) => v)
