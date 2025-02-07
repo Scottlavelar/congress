@@ -11,8 +11,8 @@ import { parseEntity } from '../entities/parse_entity';
 import { computeDaysDisplay } from './compute_days_display';
 import { computeTimeDisplay } from './compute_time_display';
 
-export const computeScheduleHeader = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
-  const primaryInfo = AsArray(
+export var computeScheduleHeader = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+  var primaryInfo = AsArray(
     !config.display_options || !config.display_options.primary_info
       ? '{entity}: {action}'
       : config.display_options.primary_info
@@ -20,8 +20,8 @@ export const computeScheduleHeader = (schedule: Schedule, config: CardConfig, ha
   return primaryInfo.map(e => computeItemDisplay(e, schedule, config, hass));
 };
 
-export const computeScheduleInfo = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
-  const primaryInfo = AsArray(
+export var computeScheduleInfo = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+  var primaryInfo = AsArray(
     !config.display_options || !config.display_options.secondary_info
       ? ['relative-time', 'additional-tasks']
       : config.display_options.secondary_info
@@ -29,17 +29,17 @@ export const computeScheduleInfo = (schedule: Schedule, config: CardConfig, hass
   return primaryInfo.map(e => computeItemDisplay(e, schedule, config, hass));
 };
 
-export const computeScheduleIcon = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+export var computeScheduleIcon = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
   if (config.display_options && config.display_options.icon && config.display_options.icon == 'entity') {
-    const entities = computeEntities(schedule, config, hass);
+    var entities = computeEntities(schedule, config, hass);
     return unique(entities.map(e => e.icon)).length == 1 ? entities[0].icon : standardIcon(entities[0].id, hass);
   } else {
-    const action = computeAction(schedule, config, hass);
+    var action = computeAction(schedule, config, hass);
     return action.icon;
   }
 };
 
-const computeItemDisplay = (
+var computeItemDisplay = (
   displayItem: string,
   schedule: Schedule,
   config: CardConfig,
@@ -75,8 +75,8 @@ const computeItemDisplay = (
     case 'days':
       return capitalize(computeDaysDisplay(schedule.weekdays, hass));
     case 'entity':
-      const entities = computeEntities(schedule, config, hass);
-      const entityDomains = unique(entities.map(e => computeDomain(e.id)));
+      var entities = computeEntities(schedule, config, hass);
+      var entityDomains = unique(entities.map(e => computeDomain(e.id)));
 
       return entities.length == 1
         ? capitalize(PrettyPrintName(entities[0].name || ''))
@@ -84,12 +84,12 @@ const computeItemDisplay = (
         ? `${entities.length}x ${localize(`domains.${entityDomains[0]}`, getLocale(hass)) || entityDomains[0]}`
         : `${entities.length}x entities`;
     case 'action':
-      const action = computeAction(schedule, config, hass);
+      var action = computeAction(schedule, config, hass);
       return capitalize(computeActionDisplay(action));
     case 'tags':
       return (schedule.tags || []).map(e => `<tag>${e}</tag>`).join('');
     default:
-      const regex = /\{([^\}]+)\}/;
+      var regex = /\{([^\}]+)\}/;
       let res;
       while ((res = regex.exec(displayItem))) {
         displayItem = displayItem.replace(res[0], String(computeItemDisplay(String(res[1]), schedule, config, hass)));
@@ -98,10 +98,10 @@ const computeItemDisplay = (
   }
 };
 
-export const computeAction = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
-  const nextEntry = schedule.timeslots[schedule.next_entries[0]];
+export var computeAction = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+  var nextEntry = schedule.timeslots[schedule.next_entries[0]];
 
-  const match = computeActions(nextEntry.actions[0].entity_id || nextEntry.actions[0].service, hass, config)
+  var match = computeActions(nextEntry.actions[0].entity_id || nextEntry.actions[0].service, hass, config)
     .filter(e => compareActions(e, nextEntry.actions[0], true))
     .reduce((_acc: Action | undefined, e) => e, undefined);
 
@@ -118,8 +118,8 @@ export const computeAction = (schedule: Schedule, config: CardConfig, hass: Home
     : importAction(nextEntry.actions[0], hass);
 };
 
-export const computeEntities = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
-  const nextEntry = schedule.timeslots[schedule.next_entries[0]];
-  const entities = unique(nextEntry.actions.map(e => e.entity_id || e.service)).map(e => parseEntity(e, hass, config));
+export var computeEntities = (schedule: Schedule, config: CardConfig, hass: HomeAssistant) => {
+  var nextEntry = schedule.timeslots[schedule.next_entries[0]];
+  var entities = unique(nextEntry.actions.map(e => e.entity_id || e.service)).map(e => parseEntity(e, hass, config));
   return entities;
 };
