@@ -23,7 +23,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { entityGroups } from '../data/entity_group';
 import { commonStyle } from '../styles';
 import { parseEntity } from '../data/entities/parse_entity';
-import { DefaultEntityIcon } from '../var';
+import { DefaultEntityIcon } from '../const';
 import {
   PrettyPrintIcon,
   PrettyPrintName,
@@ -47,7 +47,7 @@ import '../components/button-group';
 import '../components/variable-picker';
 import '../components/scheduler-selector';
 
-var getMatchTypes = (hass: HomeAssistant, filter?: EConditionMatchType[]) => {
+const getMatchTypes = (hass: HomeAssistant, filter?: EConditionMatchType[]) => {
   let output: Dictionary<ListVariableOption> = {};
 
   if (!filter?.length || filter.includes(EConditionMatchType.Above))
@@ -137,9 +137,9 @@ export class SchedulerEditorOptions extends LitElement {
   async firstUpdated() {
     if (this.config?.tags) {
       (async () => await loadHaForm())();
-      var tagEntries = await fetchTags(this.hass!);
-      var existingTags = tagEntries.map(e => e.name);
-      var configTags = AsArray(this.config.tags);
+      const tagEntries = await fetchTags(this.hass!);
+      const existingTags = tagEntries.map(e => e.name);
+      const configTags = AsArray(this.config.tags);
       this.tags = [
         ...existingTags,
         ...configTags.filter(e => !existingTags.includes(e) && !['none', 'disabled', 'enabled'].includes(e)),
@@ -375,9 +375,9 @@ export class SchedulerEditorOptions extends LitElement {
     if (!this.addCondition || !this.hass || !this.config) return html``;
 
     if (!this.selectedEntity) {
-      var hassEntities = computeEntities(this.hass, this.config, { filterActions: false, filterStates: true });
+      const hassEntities = computeEntities(this.hass, this.config, { filterActions: false, filterStates: true });
 
-      var groups = entityGroups(hassEntities, this.config, this.hass);
+      const groups = entityGroups(hassEntities, this.config, this.hass);
       groups.sort((a, b) => (a.name.trim().toLowerCase() < b.name.trim().toLowerCase() ? -1 : 1));
 
       let entities: EntityElement[] = [];
@@ -411,8 +411,8 @@ export class SchedulerEditorOptions extends LitElement {
         </button-group>
       `;
     } else {
-      var entity = this.selectedEntity;
-      var states = computeStates(entity.id, this.hass, this.config);
+      const entity = this.selectedEntity;
+      const states = computeStates(entity.id, this.hass, this.config);
 
       let availableMatchTypes: EConditionMatchType[];
       if (states?.type == EVariableType.Level)
@@ -420,7 +420,7 @@ export class SchedulerEditorOptions extends LitElement {
       else if (states?.type == EVariableType.List)
         availableMatchTypes = [EConditionMatchType.Equal, EConditionMatchType.Unequal];
       else {
-        var currentState = entity.id in this.hass.states ? this.hass.states[entity.id].state : null;
+        const currentState = entity.id in this.hass.states ? this.hass.states[entity.id].state : null;
         if (!currentState || ['unavailable', 'unknown'].includes(currentState))
           availableMatchTypes = [
             EConditionMatchType.Equal,
@@ -433,12 +433,12 @@ export class SchedulerEditorOptions extends LitElement {
         else availableMatchTypes = [EConditionMatchType.Equal, EConditionMatchType.Unequal];
       }
 
-      var matchTypes = getMatchTypes(this.hass, availableMatchTypes);
+      const matchTypes = getMatchTypes(this.hass, availableMatchTypes);
 
       return html`
         <div class="header">${this.hass.localize('ui.components.entity.entity-picker.entity')}</div>
         <div style="display: flex; flex-direction: row; align-items: center">
-          <mwc-button class="active" disabled style="--mdc-button-disabled-ink-color: var(--text-primary-color)">
+          <mwc-button class="active" disabled style="--mdc-button-disabled-ink-color: const(--text-primary-color)">
             <ha-icon icon="${PrettyPrintIcon(entity.icon || DefaultEntityIcon)}"></ha-icon>
             ${PrettyPrintName(entity.name)}
           </mwc-button>
@@ -487,14 +487,14 @@ export class SchedulerEditorOptions extends LitElement {
 
   renderConditions() {
     if (!this.hass || !this.schedule) return html``;
-    var conditions = this.schedule.timeslots[0].conditions || [];
+    const conditions = this.schedule.timeslots[0].conditions || [];
     if (!conditions.length)
       return html`
         <div class="text-field">${localize('ui.panel.conditions.no_conditions_defined', getLocale(this.hass))}</div>
       `;
     return conditions.map((item, num) => {
-      var entity = parseEntity(item.entity_id, this.hass!, this.config!);
-      var states = computeStates(item.entity_id, this.hass!, this.config!);
+      const entity = parseEntity(item.entity_id, this.hass!, this.config!);
+      const states = computeStates(item.entity_id, this.hass!, this.config!);
       return html`
         <div class="summary">
           <ha-icon icon="${entity.icon || DefaultEntityIcon}"></ha-icon>
@@ -537,14 +537,14 @@ export class SchedulerEditorOptions extends LitElement {
     )
       return;
 
-    var condition: Condition = {
+    const condition: Condition = {
       entity_id: this.selectedEntity.id,
       match_type: this.conditionMatchType,
       value: this.conditionValue,
       attribute: 'state',
     };
-    var conditions = this.schedule.timeslots[0].conditions?.length ? [...this.schedule.timeslots[0].conditions] : [];
-    var type = this.schedule.timeslots[0].condition_type
+    const conditions = this.schedule.timeslots[0].conditions?.length ? [...this.schedule.timeslots[0].conditions] : [];
+    const type = this.schedule.timeslots[0].condition_type
       ? this.schedule.timeslots[0].condition_type
       : EConditionType.Any;
 
@@ -571,12 +571,12 @@ export class SchedulerEditorOptions extends LitElement {
 
   editConditionClick(index: number) {
     if (!this.schedule || !this.schedule.timeslots[0].conditions || !this.hass || !this.config) return;
-    var item = this.schedule.timeslots[0].conditions[index];
+    const item = this.schedule.timeslots[0].conditions[index];
     if (!item) return;
     this.editConditionItem = index;
 
-    var hassEntities = computeEntities(this.hass, this.config, { filterActions: false, filterStates: true });
-    var groups = entityGroups(hassEntities, this.config, this.hass);
+    const hassEntities = computeEntities(this.hass, this.config, { filterActions: false, filterStates: true });
+    const groups = entityGroups(hassEntities, this.config, this.hass);
     this.selectedGroup = groups.find(e => e.entities.includes(item.entity_id));
     this.selectedEntity = parseEntity(item.entity_id, this.hass, this.config);
 
@@ -587,7 +587,7 @@ export class SchedulerEditorOptions extends LitElement {
 
   deleteConditionClick() {
     if (!this.config || !this.hass || !this.schedule || this.editConditionItem === undefined) return;
-    var conditions = this.schedule.timeslots[0].conditions?.length ? [...this.schedule.timeslots[0].conditions] : [];
+    const conditions = this.schedule.timeslots[0].conditions?.length ? [...this.schedule.timeslots[0].conditions] : [];
     conditions.splice(this.editConditionItem, 1);
 
     this.schedule = {
@@ -604,8 +604,8 @@ export class SchedulerEditorOptions extends LitElement {
 
   conditionTypeSwitchClick(e: Event) {
     if (!this.schedule) return;
-    var checked = (e.target as HTMLInputElement).checked;
-    var type = checked ? EConditionType.All : EConditionType.Any;
+    const checked = (e.target as HTMLInputElement).checked;
+    const type = checked ? EConditionType.All : EConditionType.Any;
     this.schedule = {
       ...this.schedule,
       timeslots: this.schedule.timeslots.map(e =>
@@ -618,7 +618,7 @@ export class SchedulerEditorOptions extends LitElement {
 
   trackConditionsClick(e: Event) {
     if (!this.schedule) return;
-    var checked = (e.target as HTMLInputElement).checked;
+    const checked = (e.target as HTMLInputElement).checked;
     this.schedule = {
       ...this.schedule,
       timeslots: this.schedule.timeslots.map(e => Object({ ...e, track_conditions: checked })),
@@ -626,10 +626,10 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   private _setStartDate(ev: CustomEvent) {
-    var value = String(ev.detail.value);
+    const value = String(ev.detail.value);
     if (!value) return;
-    var startDate = stringToDate(value);
-    var endDate = stringToDate(this.endDate);
+    const startDate = stringToDate(value);
+    const endDate = stringToDate(this.endDate);
     if (startDate > endDate) {
       this.schedule = { ...this.schedule!, end_date: value };
       this.endDate = value;
@@ -640,10 +640,10 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   private _setEndDate(ev: CustomEvent) {
-    var value = String(ev.detail.value);
+    const value = String(ev.detail.value);
     if (!value) return;
-    var startDate = stringToDate(this.startDate);
-    var endDate = stringToDate(value);
+    const startDate = stringToDate(this.startDate);
+    const endDate = stringToDate(value);
     if (startDate > endDate) {
       this.schedule = { ...this.schedule!, start_date: value };
       this.startDate = value;
@@ -654,8 +654,8 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   toggleEnableDateRange(ev: Event) {
-    var checked = (ev.target as HTMLInputElement).checked;
-    var datePickers = this.shadowRoot!.querySelectorAll('ha-date-input') as any;
+    const checked = (ev.target as HTMLInputElement).checked;
+    const datePickers = this.shadowRoot!.querySelectorAll('ha-date-input') as any;
     this.schedule = {
       ...this.schedule!,
       start_date: checked ? this.startDate : undefined,
@@ -671,7 +671,7 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   updateName(e: Event) {
-    var value = (e.target as HTMLInputElement).value;
+    const value = (e.target as HTMLInputElement).value;
     this.schedule = {
       ...this.schedule!,
       name: value,
@@ -679,7 +679,7 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   updateRepeatType(e: Event) {
-    var value = (e.target as HTMLInputElement).value as ERepeatType;
+    const value = (e.target as HTMLInputElement).value as ERepeatType;
     this.schedule = {
       ...this.schedule!,
       repeat_type: value,
@@ -706,12 +706,12 @@ export class SchedulerEditorOptions extends LitElement {
   }
 
   saveClick() {
-    var myEvent = new CustomEvent('saveClick', { detail: this.schedule });
+    const myEvent = new CustomEvent('saveClick', { detail: this.schedule });
     this.dispatchEvent(myEvent);
   }
 
   deleteClick() {
-    var myEvent = new CustomEvent('deleteClick', { detail: this.schedule });
+    const myEvent = new CustomEvent('deleteClick', { detail: this.schedule });
     this.dispatchEvent(myEvent);
   }
 
@@ -722,8 +722,8 @@ export class SchedulerEditorOptions extends LitElement {
       flex-direction: row;
       align-items: center;
       padding: 4px 0px;
-      background: rgba(var(--rgb-primary-color), 0.15);
-      color: var(--dark-primary-color);
+      background: rgba(const(--rgb-primary-color), 0.15);
+      color: const(--dark-primary-color);
       border-radius: 8px;
       margin: 2px 0px;
       font-size: 14px;
