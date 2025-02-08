@@ -6,12 +6,12 @@ import { formatTime } from '../date-time/format_time';
 import { stringToDate } from '../date-time/string_to_date';
 import { parseRelativeTime, stringToTime } from '../date-time/time';
 
-export let computeTimeDisplay = (entry: Timeslot, hass: HomeAssistant) => {
-  let computeRelativeTimeString = (timeString: string) => {
-    let res = parseRelativeTime(timeString);
+export const computeTimeDisplay = (entry: Timeslot, hass: HomeAssistant) => {
+  const computeRelativeTimeString = (timeString: string) => {
+    const res = parseRelativeTime(timeString);
     if (!res) return timeString;
 
-    let eventString =
+    const eventString =
       res.event == ETimeEvent.Sunrise
         ? getLocale(hass).language == 'de'
           ? hass.localize('ui.panel.config.automation.editor.conditions.type.sun.sunrise')
@@ -22,7 +22,7 @@ export let computeTimeDisplay = (entry: Timeslot, hass: HomeAssistant) => {
     if (Math.abs(stringToTime(res.offset, hass)) < 5 * 60)
       return localize('ui.components.time.at_sun_event', getLocale(hass), '{sunEvent}', eventString);
 
-    let signString =
+    const signString =
       res.sign == '-'
         ? hass
             .localize('ui.panel.config.automation.editor.conditions.type.sun.before')
@@ -33,23 +33,23 @@ export let computeTimeDisplay = (entry: Timeslot, hass: HomeAssistant) => {
             .replace(/[^a-z]/gi, '')
             .toLowerCase();
 
-    let timeStr = formatTime(stringToDate(res.offset), getLocale(hass), TimeFormat.twenty_four);
+    const timeStr = formatTime(stringToDate(res.offset), getLocale(hass), TimeFormat.twenty_four);
 
     return `${timeStr} ${signString} ${eventString}`;
   };
 
   if (!entry.stop) {
-    let timeString = entry.start;
+    const timeString = entry.start;
     if (parseRelativeTime(timeString)) return computeRelativeTimeString(timeString);
     else {
-      let time = stringToDate(timeString);
+      const time = stringToDate(timeString);
       return localize('ui.components.time.absolute', getLocale(hass), '{time}', formatTime(time, getLocale(hass)));
     }
   } else {
-    let start = parseRelativeTime(entry.start)
+    const start = parseRelativeTime(entry.start)
       ? computeRelativeTimeString(entry.start)
       : formatTime(stringToDate(entry.start), getLocale(hass));
-    let end = parseRelativeTime(entry.stop)
+    const end = parseRelativeTime(entry.stop)
       ? computeRelativeTimeString(entry.stop)
       : formatTime(stringToDate(entry.stop), getLocale(hass));
     return localize('ui.components.time.interval', getLocale(hass), ['{startTime}', '{endTime}'], [start, end]);
