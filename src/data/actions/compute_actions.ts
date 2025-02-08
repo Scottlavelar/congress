@@ -23,13 +23,13 @@ export function computeActions(entity_id: string | string[], hass: HomeAssistant
     return computeCommonActions(actions);
   }
 
-  var stateObj = hass.states[entity_id] as HassEntity | undefined;
+  const stateObj = hass.states[entity_id] as HassEntity | undefined;
 
   //fetch standard actions for entity
   let actions = config.standard_configuration ? standardActions(entity_id, hass) : [];
 
   //get excluded actions for entity
-  var excludedActions: string[] = flatten(
+  const excludedActions: string[] = flatten(
     Object.entries(config.customize)
       .filter(([a]) => matchPattern(a, entity_id))
       .sort((a, b) => b[0].length - a[0].length)
@@ -41,7 +41,7 @@ export function computeActions(entity_id: string | string[], hass: HomeAssistant
   }
 
   //get customizations for entity
-  var customizedActions: Action[] = flatten(
+  const customizedActions: Action[] = flatten(
     Object.entries(config.customize)
       .filter(([a]) => matchPattern(a, entity_id))
       .sort((a, b) => b[0].length - a[0].length)
@@ -60,7 +60,7 @@ export function computeActions(entity_id: string | string[], hass: HomeAssistant
       if (res < 0) {
         //try to find it in unfiltered list of built-in actions
         let allActions = config.standard_configuration ? standardActions(entity_id, hass, false) : [];
-        var match = allActions.find(e => compareActions(e, action));
+        const match = allActions.find(e => compareActions(e, action));
         if (match) {
           actions = [...actions, match];
           res = actions.length - 1;
@@ -86,7 +86,7 @@ export function computeActions(entity_id: string | string[], hass: HomeAssistant
             .reduce((obj, [key, val]) => (val ? Object.assign(obj, { [key as string]: val }) : obj), {});
 
           //add new variables
-          var newVariables = Object.keys(action.variables!).filter(e => !Object.keys(variableConfig).includes(e));
+          const newVariables = Object.keys(action.variables!).filter(e => !Object.keys(variableConfig).includes(e));
 
           variableConfig = {
             ...variableConfig,
@@ -109,7 +109,7 @@ export function computeActions(entity_id: string | string[], hass: HomeAssistant
   }
 
   //filter by supported_features
-  var supportedFeatures = computeSupportedFeatures(stateObj);
+  const supportedFeatures = computeSupportedFeatures(stateObj);
   actions = actions.filter(e => !e.supported_feature || e.supported_feature & supportedFeatures);
 
   //list variable with 1 option is not really a variable
