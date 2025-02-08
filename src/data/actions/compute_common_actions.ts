@@ -14,17 +14,17 @@ export function computeCommonActions(actionLists: Action[][]) {
 
   commonActions = commonActions
     .map(action => {
-      var mergedVariables: VariableDictionary = Object.entries(action.variables || {})
+      const mergedVariables: VariableDictionary = Object.entries(action.variables || {})
         .map(([field, variable]) => {
           //compute action per entity
-          var actions = actionLists.map(e => e.find(k => compareActions(k, action)));
+          const actions = actionLists.map(e => e.find(k => compareActions(k, action)));
 
           //remove the variable if it is not in common
           if (!actions.every(e => e && e.variables && field in e.variables)) {
             return [field, undefined];
           }
 
-          var variables = actions.map(e => e!.variables![field]);
+          const variables = actions.map(e => e!.variables![field]);
 
           if (!variables.every(e => variable.type == e.type)) return [field, undefined];
 
