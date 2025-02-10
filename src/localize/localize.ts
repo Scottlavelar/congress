@@ -22,7 +22,7 @@ import * as uk from './languages/uk.json';
 import * as zh_Hans from './languages/zh-Hans.json';
 import { FrontendTranslationData } from 'custom-card-helpers';
 
-var languages: any = {
+const languages: any = {
   cs: cs,
   de: de,
   en: en,
@@ -74,9 +74,9 @@ export function localize(
     if (!Array.isArray(replace)) replace = [replace];
     for (let i = 0; i < (search as string[]).length; i++) {
       translated = translated.replace(String(search[i]), String(replace[i]));
-      var res = translated.match(/\{if ([a-z]+) is ([^\}]+)\}\ ?([^\{]+)\ ?\{else\}\ ?([^\{]+)/i);
+      const res = translated.match(/\{if ([a-z]+) is ([^\}]+)\}\ ?([^\{]+)\ ?\{else\}\ ?([^\{]+)/i);
       if (res && String(search[i]).replace(/[\{\}']+/g, '') == res[1]) {
-        var is_match = String(replace[i]) == res[2];
+        const is_match = String(replace[i]) == res[2];
         if (is_match) translated = translated.replace(res[0], res[3]);
         else translated = translated.replace(res[0], res[4]);
       }
