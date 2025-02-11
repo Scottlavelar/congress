@@ -29,13 +29,13 @@ export const commonStyle = css`
       margin-bottom: 0;
     }
     div.text-field, div.secondary {
-      color: var(--secondary-text-color);
+      color: let(--secondary-text-color);
     }
     .disabled {
-      color: var(--disabled-text-color);
+      color: let(--disabled-text-color);
     }
     div.header {
-      color: var(--secondary-text-color);
+      color: let(--secondary-text-color);
       text-transform: uppercase;
       font-weight: 500;
       font-size: 12px;
@@ -58,15 +58,15 @@ export const commonStyle = css`
       line-height: 24px;
     }
     mwc-button.active {
-      background: var(--primary-color);
-      --mdc-theme-primary: var(--text-primary-color);
+      background: let(--primary-color);
+      --mdc-theme-primary: let(--text-primary-color);
       border-radius: 4px;
     }      
     mwc-button ha-icon {
       margin-right: 11px;
     }
     mwc-button.warning {
-      --mdc-theme-primary: var(--error-color);
+      --mdc-theme-primary: let(--error-color);
     }
     div.checkbox-container {
       display: grid;
@@ -92,10 +92,10 @@ export const commonStyle = css`
       align-items: center;
     }
     a {
-      color: var(--primary-color);
+      color: let(--primary-color);
     }
     a:visited {
-      color: var(--accent-color);
+      color: let(--accent-color);
     }
 
     
@@ -109,8 +109,8 @@ export const commonStyle = css`
       padding-top: 16px;
       justify-content: space-between;
       padding-bottom: max(env(safe-area-inset-bottom), 24px);
-      background-color: var(--mdc-theme-surface, #fff);
-      border-top: 1px solid var(--divider-color);
+      background-color: let(--mdc-theme-surface, #fff);
+      border-top: 1px solid let(--divider-color);
       position: sticky;
       bottom: 0px;
     }
@@ -124,16 +124,16 @@ export const dialogStyle = css`
   ha-dialog {
     --mdc-dialog-min-width: 400px;
     --mdc-dialog-max-width: 600px;
-    --mdc-dialog-heading-ink-color: var(--primary-text-color);
-    --mdc-dialog-content-ink-color: var(--primary-text-color);
+    --mdc-dialog-heading-ink-color: let(--primary-text-color);
+    --mdc-dialog-content-ink-color: let(--primary-text-color);
     --justify-action-buttons: space-between;
     --dialog-content-padding: 0px;
   }
   ha-dialog .form {
-    color: var(--primary-text-color);
+    color: let(--primary-text-color);
   }
   a {
-    color: var(--primary-color);
+    color: let(--primary-color);
   }
   /* make dialog fullscreen on small screens */
   @media all and (max-width: 450px), all and (max-height: 500px) {
@@ -147,10 +147,10 @@ export const dialogStyle = css`
     }
   }
   mwc-button.warning {
-    --mdc-theme-primary: var(--error-color);
+    --mdc-theme-primary: let(--error-color);
   }
   .error {
-    color: var(--error-color);
+    color: let(--error-color);
   }
   ha-dialog {
     --dialog-surface-position: static;
@@ -161,7 +161,7 @@ export const dialogStyle = css`
     outline: none;
   }
   .heading {
-    border-bottom: 1px solid var(--mdc-dialog-scroll-divider-color, rgba(0, 0, 0, 0.12));
+    border-bottom: 1px solid let(--mdc-dialog-scroll-divider-color, rgba(0, 0, 0, 0.12));
   }
   :host([tab='time']) ha-dialog {
     --dialog-content-padding: 0px;
@@ -179,7 +179,7 @@ export const dialogStyle = css`
     }
   }
   mwc-tab[disabled] {
-    --mdc-tab-text-label-color-default: var(--material-disabled-text-color);
+    --mdc-tab-text-label-color-default: let(--material-disabled-text-color);
     pointer-events: none;
   }
 `;
