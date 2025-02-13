@@ -16,8 +16,8 @@ interface Omit {
   };
 }
 
-export var omit: Omit = (obj, ...keys) => {
-  var ret = {} as {
+export const omit: Omit = (obj, ...keys) => {
+  const ret = {} as {
     [K in keyof typeof obj]: typeof obj[K];
   };
   let key: keyof typeof obj;
@@ -57,7 +57,7 @@ export function isDefined<TValue>(value: TValue | null | undefined): value is TV
 
 export function isEqual(...arr: any[]) {
   if (!arr.length) return false;
-  var firstItem = arr[0];
+  const firstItem = arr[0];
 
   return arr.every(item => {
     return firstItem && item && typeof firstItem === 'object' && typeof item === 'object'
@@ -68,7 +68,7 @@ export function isEqual(...arr: any[]) {
 }
 
 export function sortAlphabetically(a: any, b: any) {
-  var stringVal = (a: any) => {
+  const stringVal = (a: any) => {
     if (typeof a === 'object') {
       return a.name !== undefined
         ? String(a.name)
@@ -110,7 +110,7 @@ export function calculateTimeline(entries: Timeslot[], hass: HomeAssistant): Tim
   );
 
   entries = entries.map(e => {
-    var duration = stringToTime(e.stop!, hass) - stringToTime(e.start, hass);
+    const duration = stringToTime(e.stop!, hass) - stringToTime(e.start, hass);
     if (duration < 0) {
       if (stringToTime(e.stop!, hass) == 0)
         //if stop time is 00:00:00, this should be mapped as the end of the day
@@ -148,7 +148,7 @@ export function calculateTimeline(entries: Timeslot[], hass: HomeAssistant): Tim
 
   //insert empty timeslots where needed
   for (let i = 0; i < len; i++) {
-    var entry = entries[i];
+    const entry = entries[i];
     if (stringToTime(entry.start, hass) > stringToTime(startTime, hass)) {
       entries.splice(
         i,
@@ -170,7 +170,7 @@ export function calculateTimeline(entries: Timeslot[], hass: HomeAssistant): Tim
     }
     startTime = entry.stop!;
   }
-  var endOfDay = 24 * 3600;
+  const endOfDay = 24 * 3600;
 
   //insert empty timeslots at the end when needed
   if (stringToTime(startTime, hass) < endOfDay && stringToTime(startTime, hass) > 0) {
@@ -194,7 +194,7 @@ export function IsDefaultName(name?: string) {
   return name.match(/^Schedule\ #[a-f0-9]{6}/) !== null;
 }
 
-export var getLocale = (hass: HomeAssistant): FrontendTranslationData =>
+export const getLocale = (hass: HomeAssistant): FrontendTranslationData =>
   hass.locale || {
     language: hass.language,
     number_format: NumberFormat.system,
