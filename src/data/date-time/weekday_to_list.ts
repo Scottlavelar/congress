@@ -1,7 +1,7 @@
 import { WeekdayType } from '../../types';
 
 export function weekdayToList(weekday: WeekdayType) {
-  const list = weekday
+  let list = weekday
     .map(e => {
       switch (e) {
         case 'mon':
