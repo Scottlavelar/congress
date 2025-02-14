@@ -8,7 +8,7 @@ export interface HassSubscribeElement {
 }
 export type Constructor<T = any> = new (...args: any[]) => T;
 
-export const SubscribeMixin = <T extends Constructor<ReactiveElement>>(superClass: T) => {
+export let SubscribeMixin = <T extends Constructor<ReactiveElement>>(superClass: T) => {
   class SubscribeClass extends superClass {
     @property({ attribute: false }) public hass?: HomeAssistant;
 
@@ -23,7 +23,7 @@ export const SubscribeMixin = <T extends Constructor<ReactiveElement>>(superClas
       super.disconnectedCallback();
       if (this.__unsubs) {
         while (this.__unsubs.length) {
-          const unsub = this.__unsubs.pop()!;
+          let unsub = this.__unsubs.pop()!;
           if (unsub instanceof Promise) {
             unsub.then(unsubFunc => unsubFunc());
           } else {
