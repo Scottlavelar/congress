@@ -2,7 +2,7 @@ import { HassEntity } from 'home-assistant-js-websocket';
 import { computeDomain } from 'custom-card-helpers';
 import { unique } from '../../helpers';
 
-export var colorModesToSupportedFeatures = (colorModes: any) => {
+export const colorModesToSupportedFeatures = (colorModes: any) => {
   if (!colorModes || !Array.isArray(colorModes)) return 0;
   let features: number[] = colorModes.map(mode => {
     switch (mode) {
@@ -25,9 +25,9 @@ export var colorModesToSupportedFeatures = (colorModes: any) => {
   return features.reduce((acc, val) => acc | val, 0);
 };
 
-export var computeSupportedFeatures = (stateObj: HassEntity | undefined) => {
+export const computeSupportedFeatures = (stateObj: HassEntity | undefined) => {
   if (!stateObj) return 0;
-  var domain = computeDomain(stateObj.entity_id);
+  const domain = computeDomain(stateObj.entity_id);
 
   switch (domain) {
     case 'light':
