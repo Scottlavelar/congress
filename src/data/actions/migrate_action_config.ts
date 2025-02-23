@@ -4,7 +4,7 @@ import { importAction } from './import_action';
 import { compareActions } from './compare_actions';
 import { assignAction } from './assign_action';
 
-export var migrateActionConfig = (
+export const migrateActionConfig = (
   config: ServiceCall,
   entities: string[],
   actions: Action[],
@@ -12,7 +12,7 @@ export var migrateActionConfig = (
 ): ServiceCall[] | null => {
   if (!config) return null;
 
-  var action = importAction(config, hass);
+  const action = importAction(config, hass);
   let match = actions.find(e => compareActions(e, action, true));
 
   if (!match) return null;
@@ -26,7 +26,7 @@ export var migrateActionConfig = (
       switch (match!.variables![variable].type) {
         case EVariableType.Level:
           //keep the selected level variable while maintaining min/max/step size/scale factor
-          var levelVariable = match!.variables![variable] as LevelVariable;
+          const levelVariable = match!.variables![variable] as LevelVariable;
           let val = Number(config.service_data![variable]);
           val = val / levelVariable.scale_factor;
           val = Math.round(val / levelVariable.step) * levelVariable.step;
@@ -38,7 +38,7 @@ export var migrateActionConfig = (
           return output.map(e => Object.assign(e, { service_data: { ...e.service_data, [variable]: val } }));
 
         case EVariableType.List:
-          var listVariable = match!.variables![variable] as ListVariable;
+          const listVariable = match!.variables![variable] as ListVariable;
           if (listVariable.options.some(e => e.value == config.service_data![variable]))
             //keep the selected list variable if it is in common
             return output.map(e =>
