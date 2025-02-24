@@ -15,9 +15,9 @@ export type ActionItem = {
   condition?: (stateObj: HassEntity | undefined) => boolean;
 };
 
-var temperatureVariable = (stateObj: HassEntity | undefined, hass: HomeAssistant) => {
-  var tempUnit = hass.config.unit_system.temperature;
-  var isFahrenHeit = tempUnit.includes('F');
+const temperatureVariable = (stateObj: HassEntity | undefined, hass: HomeAssistant) => {
+  const tempUnit = hass.config.unit_system.temperature;
+  const isFahrenHeit = tempUnit.includes('F');
 
   return levelVariable({
     min: numericAttribute(stateObj, 'min_temp', isFahrenHeit ? 45 : 7),
@@ -27,13 +27,13 @@ var temperatureVariable = (stateObj: HassEntity | undefined, hass: HomeAssistant
   });
 };
 
-export var hasProperty = (stateObj: HassEntity | undefined, attribute: string) => {
+export const hasProperty = (stateObj: HassEntity | undefined, attribute: string) => {
   return (
     isDefined(stateObj) && hasOwnProperty(stateObj, 'attributes') && hasOwnProperty(stateObj.attributes, attribute)
   );
 };
 
-export var actionList: Record<string, Record<string, ActionItem>> = {
+export const actionList: Record<string, Record<string, ActionItem>> = {
   alarm_control_panel: {
     alarm_disarm: {},
     alarm_arm_home: {
@@ -156,7 +156,7 @@ export var actionList: Record<string, Record<string, ActionItem>> = {
       variables: {
         hvac_mode: {
           template: stateObj => {
-            var supportedFeatures = numericAttribute(stateObj, 'supported_features') || 0;
+            const supportedFeatures = numericAttribute(stateObj, 'supported_features') || 0;
             let modes = listAttribute(stateObj, 'hvac_modes');
             modes = modes.filter(e => !['heat', 'cool', 'heat_cool', 'auto', 'off'].includes(e));
             return { options: modes };
