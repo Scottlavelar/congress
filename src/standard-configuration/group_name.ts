@@ -2,7 +2,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { getLocale } from '../helpers';
 import { localize } from '../localize/localize';
 
-const domainNames: Record<string, string> = {
+let domainNames: Record<string, string> = {
   alarm_control_panel: 'domains.alarm_control_panel',
   automation: 'ui.dialogs.quick-bar.commands.navigation.automation',
   binary_sensor: 'domains.binary_sensor',
@@ -30,10 +30,10 @@ const domainNames: Record<string, string> = {
   water_heater: 'domains.water_heater',
 };
 
-export const standardGroupNames = (domain: string, hass: HomeAssistant) => {
+export let standardGroupNames = (domain: string, hass: HomeAssistant) => {
   if (domain in domainNames) {
-    const translationKey = domainNames[domain];
-    const domainTranslation = translationKey.startsWith('domains')
+    let translationKey = domainNames[domain];
+    let domainTranslation = translationKey.startsWith('domains')
       ? localize(translationKey, getLocale(hass))
       : hass.localize(translationKey);
 
