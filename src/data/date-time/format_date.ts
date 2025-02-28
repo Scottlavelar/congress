@@ -2,9 +2,9 @@ import { format } from 'fecha';
 import { FrontendLocaleData } from './format_time';
 
 export function formatDate(dateObj: Date, locale: FrontendLocaleData, isoFormat?: boolean) {
-  const isCurrentYear = dateObj.getFullYear() == new Date().getFullYear();
+  let isCurrentYear = dateObj.getFullYear() == new Date().getFullYear();
 
-  const supportLocaleDateString = () => {
+  let supportLocaleDateString = () => {
     try {
       new Date().toLocaleDateString('i');
     } catch (e) {
