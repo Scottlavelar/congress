@@ -2,13 +2,13 @@ import { computeDomain, computeEntity } from 'custom-card-helpers';
 import { numericAttribute, stringAttribute } from './attribute';
 import { VariableConfig } from './variables';
 
-const onOffType = { options: ['on', 'off'] };
+var onOffType = { options: ['on', 'off'] };
 
-export const statesList: Record<string, VariableConfig> = {
+export var statesList: Record<string, VariableConfig> = {
   alarm_control_panel: {
     template: stateObj => {
       let modes = ['disarmed', 'triggered'];
-      const supported = numericAttribute(stateObj, 'supported_features') || 0;
+      var supported = numericAttribute(stateObj, 'supported_features') || 0;
       if (supported & 2) modes = [...modes, 'armed_away'];
       if (supported & 1) modes = [...modes, 'armed_home'];
       if (supported & 4) modes = [...modes, 'armed_night'];
@@ -45,8 +45,8 @@ export const statesList: Record<string, VariableConfig> = {
   },
   person: {
     template: (_stateObj, hass) => {
-      const modes = ['home', 'not_home'];
-      const zones = Object.keys(hass.states)
+      var modes = ['home', 'not_home'];
+      var zones = Object.keys(hass.states)
         .filter(e => computeDomain(e) == 'zone')
         .map(computeEntity);
       return { options: [...new Set([...modes, ...zones])] };
