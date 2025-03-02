@@ -14,7 +14,7 @@ import {
   ETimeEvent,
 } from '../types';
 import { PrettyPrintIcon, PrettyPrintName, capitalize, sortAlphabetically, omit, isEqual, getLocale } from '../helpers';
-import { DefaultTimeStep, DefaultActionIcon } from '../var';
+import { DefaultTimeStep, DefaultActionIcon } from '../const';
 import { commonStyle } from '../styles';
 import { computeActionDisplay } from '../data/actions/compute_action_display';
 import { startOfWeek } from '../data/date-time/start_of_week';
@@ -65,8 +65,8 @@ export class SchedulerEditorTime extends LitElement {
     if (!this.actions || !this.hass) return;
     if (!this.timeslots) this.activeEntry = 0;
 
-    var actions = this.actions.map(e => {
-      var action = {
+    const actions = this.actions.map(e => {
+      const action = {
         ...e,
         service_data: omit(e.service_data || {}, ...Object.keys(e.variables || {})),
       };
@@ -194,14 +194,14 @@ export class SchedulerEditorTime extends LitElement {
     if (!this.hass) return html``;
 
     let weekdays = Array.from(Array(7).keys());
-    var firstWeekday = startOfWeek(this.hass.language);
-    var shiftCount = weekdays.length - weekdayArray.findIndex(e => e.substr(0, 3) == firstWeekday);
+    const firstWeekday = startOfWeek(this.hass.language);
+    const shiftCount = weekdays.length - weekdayArray.findIndex(e => e.substr(0, 3) == firstWeekday);
     weekdays = [...weekdays.slice(-shiftCount), ...weekdays.slice(0, -shiftCount)];
-    var DayOptions = weekdays.map(e =>
+    const DayOptions = weekdays.map(e =>
       Object({ value: weekdayArray[e].substr(0, 3), name: formatWeekday(e, getLocale(this.hass!), true) })
     );
 
-    var DayTypeOptions = [
+    const DayTypeOptions = [
       { value: EDayType.Daily, name: localize('ui.components.date.day_types_short.daily', getLocale(this.hass)) },
       { value: EDayType.Workday, name: localize('ui.components.date.day_types_short.workdays', getLocale(this.hass)) },
       { value: EDayType.Weekend, name: localize('ui.components.date.day_types_short.weekend', getLocale(this.hass)) },
@@ -235,7 +235,7 @@ export class SchedulerEditorTime extends LitElement {
   renderActions() {
     if (!this.hass || this.activeMarker !== null) return;
 
-    var selectedAction =
+    const selectedAction =
       this.activeEntry !== null && this.schedule.timeslots[this.activeEntry!].actions.length
         ? this.schedule.timeslots[this.activeEntry!].actions[0]
         : null;
@@ -258,13 +258,13 @@ export class SchedulerEditorTime extends LitElement {
   renderMarkerOptions() {
     if (!this.hass || !this.config || this.activeMarker === null) return;
 
-    var value = this.schedule.timeslots[this.activeMarker].start;
-    var res = parseRelativeTime(value);
+    const value = this.schedule.timeslots[this.activeMarker].start;
+    const res = parseRelativeTime(value);
 
-    var deltaSunrise = stringToTime(value, this.hass) - stringToTime('sunrise+00:00', this.hass),
+    const deltaSunrise = stringToTime(value, this.hass) - stringToTime('sunrise+00:00', this.hass),
       deltaSunset = stringToTime(value, this.hass) - stringToTime('sunset+00:00', this.hass);
 
-    var markerOptions = [
+    const markerOptions = [
       {
         value: 'time',
         name: this.hass.localize('ui.panel.config.automation.editor.triggers.type.time.at'),
@@ -292,10 +292,10 @@ export class SchedulerEditorTime extends LitElement {
   }
 
   updateMarkerSetting(ev: Event) {
-    var value = (ev.target as HTMLInputElement).value;
-    var ts = this.schedule.timeslots[this.activeMarker!].start;
+    const value = (ev.target as HTMLInputElement).value;
+    const ts = this.schedule.timeslots[this.activeMarker!].start;
 
-    var res =
+    const res =
       value == 'time'
         ? relToAbsTime(ts, this.hass!, { stepSize: this.config!.time_step })
         : absToRelTime(ts, value as ETimeEvent, this.hass!, { stepSize: this.config!.time_step });
@@ -334,7 +334,7 @@ export class SchedulerEditorTime extends LitElement {
           typeof val == 'object' && key in this.schedule.timeslots[this.activeEntry!].actions[num]
             ? { ...actionConfig[num][key], ...val }
             : val;
-        var invalidParams = Object.keys(serviceData).filter(e => serviceData[e] === null);
+        const invalidParams = Object.keys(serviceData).filter(e => serviceData[e] === null);
         if (invalidParams.length) serviceData = omit(serviceData, ...invalidParams);
 
         actionConfig = Object.assign(actionConfig, {
@@ -351,7 +351,7 @@ export class SchedulerEditorTime extends LitElement {
 
   handlePlannerUpdate(ev: CustomEvent) {
     if (ev.detail.hasOwnProperty('entries')) {
-      var entries: Timeslot[] = ev.detail.entries;
+      const entries: Timeslot[] = ev.detail.entries;
       if (entries.length < this.schedule.timeslots.length && this.activeEntry == this.schedule.timeslots.length - 1)
         this.activeEntry = this.schedule.timeslots.length - 2;
       this.schedule = {
@@ -370,7 +370,7 @@ export class SchedulerEditorTime extends LitElement {
 
   selectAction(ev: CustomEvent) {
     if (!this.actions || this.activeEntry === null) return;
-    var action: Action | null = ev.detail;
+    const action: Action | null = ev.detail;
     if (action) {
       this.entities!.map(e => e.id).forEach((entity_id, num) => {
         this.updateActiveEntryAction(assignAction(entity_id, action), num);
@@ -385,7 +385,7 @@ export class SchedulerEditorTime extends LitElement {
   getVariableEditor() {
     if (this.activeEntry === null || !this.actions) return html``;
 
-    var actions: ServiceCall[] = [];
+    const actions: ServiceCall[] = [];
     this.schedule.timeslots[this.activeEntry].actions.forEach(action => {
       action = omit(action, 'entity_id');
       if (!this.actions!.find(e => compareActions(e, action, true) && Object.keys(e.variables || {}).length)) return;
@@ -421,7 +421,7 @@ export class SchedulerEditorTime extends LitElement {
   }
 
   selectDays(ev: Event) {
-    var value = (ev.target as HTMLInputElement).value;
+    const value = (ev.target as HTMLInputElement).value;
     let weekdays = this.schedule.weekdays;
     if (Object.values(EDayType).includes(value as EDayType)) {
       switch (value as EDayType) {
@@ -465,14 +465,14 @@ export class SchedulerEditorTime extends LitElement {
     }
     div.summary-arrow {
       grid-area: arrow;
-      color: var(--secondary-text-color);
+      color: const(--secondary-text-color);
       display: flex;
       justify-content: center;
       align-items: center;
     }
     div.summary-entity,
     div.summary-action {
-      color: var(--dark-primary-color);
+      color: const(--dark-primary-color);
       padding: 5px;
       font-size: 14px;
       font-weight: 500;
@@ -480,7 +480,7 @@ export class SchedulerEditorTime extends LitElement {
       position: relative;
       display: flex;
       flex-direction: column;
-      background: rgba(var(--rgb-primary-color), 0.15);
+      background: rgba(const(--rgb-primary-color), 0.15);
       border-radius: 4px;
       align-items: center;
     }
