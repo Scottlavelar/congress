@@ -27,9 +27,9 @@ interface LoadedDialogsDict {
   [tag: string]: LoadedDialogInfo;
 }
 
-var LOADED: LoadedDialogsDict = {};
+const LOADED: LoadedDialogsDict = {};
 
-export var isEmbeddedInPopup = (element: HTMLElement) => {
+export const isEmbeddedInPopup = (element: HTMLElement) => {
   let root = element as any;
   while (root && root.parentNode) {
     if (root.parentNode === document) {
@@ -45,7 +45,7 @@ export var isEmbeddedInPopup = (element: HTMLElement) => {
   return false;
 };
 
-export var getPopupRootElement = (element: HTMLElement) => {
+export const getPopupRootElement = (element: HTMLElement) => {
   let root = element as any;
   while (root && root.parentNode) {
     if (root.parentNode === document) {
@@ -60,12 +60,12 @@ export var getPopupRootElement = (element: HTMLElement) => {
   return root;
 };
 
-export var showDialog = async (
+export const showDialog = async (
   element: HTMLElement & ProvideHassElement,
   config: ShowDialogParams<unknown>,
   useAlternativeDialog?: boolean
 ) => {
-  var popupRoot = useAlternativeDialog
+  const popupRoot = useAlternativeDialog
     ? getPopupRootElement(element)
     : useAlternativeDialog === undefined
     ? isEmbeddedInPopup(element)
@@ -82,13 +82,13 @@ export var showDialog = async (
       }
       LOADED[config.dialogTag] = {
         element: config.dialogImport().then(() => {
-          var dialogEl = document.createElement(config.dialogTag) as HassDialog;
+          const dialogEl = document.createElement(config.dialogTag) as HassDialog;
           element.provideHass(dialogEl);
           return dialogEl;
         }),
       };
     }
-    var dialogElement = await LOADED[config.dialogTag].element;
+    const dialogElement = await LOADED[config.dialogTag].element;
     popupRoot.appendChild(dialogElement);
     dialogElement.showDialog(config.dialogParams);
   }
