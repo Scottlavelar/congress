@@ -2,7 +2,7 @@ import { isEqual } from '../../helpers';
 import { Action, EVariableType, LevelVariable, ListVariable } from '../../types';
 
 export function compareActions(actionA: Action, actionB: Action, allowVars = false) {
-  const isOptional = (variable: string, action: Action) => {
+  let isOptional = (variable: string, action: Action) => {
     return (
       Object.keys(action.variables || {}).includes(variable) &&
       action.variables![variable].type == EVariableType.Level &&
@@ -13,15 +13,15 @@ export function compareActions(actionA: Action, actionB: Action, allowVars = fal
   //actions should have the same service
   if (actionA.service !== actionB.service) return false;
 
-  const serviceDataA = Object.keys(actionA.service_data || {});
-  const variablesA = Object.keys(actionA.variables || {});
+  let serviceDataA = Object.keys(actionA.service_data || {});
+  let variablesA = Object.keys(actionA.variables || {});
 
-  const serviceDataB = Object.keys(actionB.service_data || {});
-  const variablesB = Object.keys(actionB.variables || {});
+  let serviceDataB = Object.keys(actionB.service_data || {});
+  let variablesB = Object.keys(actionB.variables || {});
 
-  const argsA = [...new Set([...serviceDataA, ...variablesA])];
-  const argsB = [...new Set([...serviceDataB, ...variablesB])];
-  const allArgs = [...new Set([...argsA, ...argsB])];
+  let argsA = [...new Set([...serviceDataA, ...variablesA])];
+  let argsB = [...new Set([...serviceDataB, ...variablesB])];
+  let allArgs = [...new Set([...argsA, ...argsB])];
 
   return allArgs.every(arg => {
     // both actions must have the parameter in common
@@ -41,9 +41,9 @@ export function compareActions(actionA: Action, actionB: Action, allowVars = fal
     if (!allowVars) return false;
 
     // compare a fixed value with variable
-    const value = serviceDataA.includes(arg) ? actionA.service_data![arg] : actionB.service_data![arg];
+    let value = serviceDataA.includes(arg) ? actionA.service_data![arg] : actionB.service_data![arg];
 
-    const variable = variablesA.includes(arg) ? actionA.variables![arg] : actionB.variables![arg];
+    let variable = variablesA.includes(arg) ? actionA.variables![arg] : actionB.variables![arg];
 
     if (variable.type === EVariableType.List) {
       return (variable as ListVariable).options.some(e => e.value === value);
