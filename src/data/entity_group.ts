@@ -1,5 +1,5 @@
 import { Group, CardConfig } from '../types';
-import { DefaultGroupIcon } from '../var';
+import { DefaultGroupIcon } from '../const';
 import { computeDomain, HomeAssistant } from 'custom-card-helpers';
 import { domainIcons } from '../standard-configuration/standardIcon';
 import { entityFilter } from './entities/entity_filter';
@@ -23,8 +23,8 @@ export function entityGroups(entities: string[], config: Partial<CardConfig>, ha
     });
   }
 
-  var ungroupedEntities = entities.filter(e => !groups.some(g => g.entities.includes(e)));
-  var domains = ungroupedEntities.map(computeDomain).filter((v, k, arr) => arr.indexOf(v) === k);
+  const ungroupedEntities = entities.filter(e => !groups.some(g => g.entities.includes(e)));
+  const domains = ungroupedEntities.map(computeDomain).filter((v, k, arr) => arr.indexOf(v) === k);
 
   //automatically create groups for ungrouped entities
   domains.forEach(domain => {
