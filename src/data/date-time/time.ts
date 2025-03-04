@@ -3,29 +3,29 @@ import { ETimeEvent } from '../../types';
 
 export function stringToTime(string: string, hass: HomeAssistant) {
   if (string.match(/^([0-9:]+)$/)) {
-    var parts = string.split(':').map(Number);
+    const parts = string.split(':').map(Number);
     return parts[0] * 3600 + parts[1] * 60 + (parts[2] || 0);
   }
-  var res = parseRelativeTime(string);
+  const res = parseRelativeTime(string);
   if (res) {
-    var sunEntity = hass.states['sun.sun'];
-    var ts_sunrise = stringToTime(sunEntity.attributes.next_rising, hass);
-    var ts_sunset = stringToTime(sunEntity.attributes.next_setting, hass);
+    const sunEntity = hass.states['sun.sun'];
+    const ts_sunrise = stringToTime(sunEntity.attributes.next_rising, hass);
+    const ts_sunset = stringToTime(sunEntity.attributes.next_setting, hass);
 
     let ts = res.event == 'sunrise' ? ts_sunrise : ts_sunset;
     ts = res.sign == '+' ? ts + stringToTime(res.offset, hass) : ts - stringToTime(res.offset, hass);
     return ts;
   }
-  var ts = new Date(string);
+  const ts = new Date(string);
   return ts.getHours() * 3600 + ts.getMinutes() * 60 + ts.getSeconds();
 }
 
 export function timeToString(time: number) {
-  var hours = Math.floor(time / 3600);
+  const hours = Math.floor(time / 3600);
   time -= hours * 3600;
-  var minutes = Math.floor(time / 60);
+  const minutes = Math.floor(time / 60);
   time -= minutes * 60;
-  var seconds = Math.round(time);
+  const seconds = Math.round(time);
   return (
     String(hours % 24).padStart(2, '0') +
     ':' +
@@ -56,7 +56,7 @@ export function roundTime(
     if (hours >= 24) hours -= 24;
     else if (hours < 0) hours += 24;
   }
-  var time = hours * 3600 + minutes * 60;
+  const time = hours * 3600 + minutes * 60;
   if (options.maxHours) {
     if (time > options.maxHours * 3600) return options.maxHours * 3600;
     if (time < -options.maxHours * 3600) return -options.maxHours * 3600;
@@ -65,7 +65,7 @@ export function roundTime(
 }
 
 export function parseRelativeTime(time: string) {
-  var match = time.match(/^([a-z]+)([\+|-]{1})([0-9:]+)$/);
+  const match = time.match(/^([a-z]+)([\+|-]{1})([0-9:]+)$/);
   if (!match) return false;
   return {
     event: match[1] as ETimeEvent,
