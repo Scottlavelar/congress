@@ -57,7 +57,7 @@ export class GenericDialog extends LitElement {
           : ''}
         <mwc-button
           slot="secondaryAction"
-          style="${this._params.primaryButtonCritical ? '--mdc-theme-primary: const(--error-color)' : ''}"
+          style="${this._params.primaryButtonCritical ? '--mdc-theme-primary: let(--error-color)' : ''}"
           @click=${this.confirmClick}
           dialogAction="close"
         >
@@ -78,7 +78,7 @@ export class GenericDialog extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       div.wrapper {
-        color: const(--primary-text-color);
+        color: let(--primary-text-color);
       }
     `;
   }
