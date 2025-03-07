@@ -6,7 +6,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import visualizer from 'rollup-plugin-visualizer';
 
 
-const plugins = [
+let plugins = [
   nodeResolve(),
   commonjs({
     include: 'node_modules/**',
