@@ -8,15 +8,15 @@ import { omit } from '../helpers';
 import { computeSupportedFeatures } from '../data/entities/compute_supported_features';
 
 export function groupActions(hass: HomeAssistant, entity: HassEntity, entityActions: Action[][]) {
-  const entities: string[] =
+  let entities: string[] =
     entity && entity.attributes.entity_id && Array.isArray(entity.attributes.entity_id)
       ? entity.attributes.entity_id
       : [];
 
   entityActions = entityActions.map((actions, i) => {
     //filter by supported_features
-    const stateObj: HassEntity | undefined = hass.states[entities[i]];
-    const supportedFeatures = computeSupportedFeatures(stateObj);
+    let stateObj: HassEntity | undefined = hass.states[entities[i]];
+    let supportedFeatures = computeSupportedFeatures(stateObj);
     actions = actions
       .filter(e => !e.supported_feature || e.supported_feature & supportedFeatures)
       .map(action => omit(action, 'supported_feature'));
@@ -24,7 +24,7 @@ export function groupActions(hass: HomeAssistant, entity: HassEntity, entityActi
   });
 
   //find matches
-  const mixedDomains = [...new Set(entities.map(e => computeDomain(e)))].length > 1;
+  let mixedDomains = [...new Set(entities.map(e => computeDomain(e)))].length > 1;
   if (mixedDomains) {
     entityActions = entityActions.map(actionList => {
       return actionList.map(action => {
@@ -40,11 +40,11 @@ export function groupActions(hass: HomeAssistant, entity: HassEntity, entityActi
     });
   }
   if (!entityActions.length) return [];
-  const commonActions = computeCommonActions(entityActions);
+  let commonActions = computeCommonActions(entityActions);
   return commonActions;
 }
 
-export const groupStates = (_hass: HomeAssistant, _stateObj: HassEntity, entityStates: Variable[]): Variable | null => {
+export let groupStates = (_hass: HomeAssistant, _stateObj: HassEntity, entityStates: Variable[]): Variable | null => {
   if (!entityStates.length) return null;
   if (!entityStates.every(e => e.type == entityStates[0].type)) return null;
   if (entityStates[0].type == EVariableType.List) return listVariable(...(entityStates as ListVariable[]));
