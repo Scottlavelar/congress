@@ -1,7 +1,7 @@
 import { Action, EVariableType, LevelVariable, ListVariable, ServiceCall, TextVariable } from '../../types';
 import { omit } from '../../helpers';
 
-export const assignAction = (entity_id: string, action: Action) => {
+export var assignAction = (entity_id: string, action: Action) => {
   let output: ServiceCall = {
     entity_id: entity_id,
     service: action.service,
@@ -9,7 +9,7 @@ export const assignAction = (entity_id: string, action: Action) => {
   };
 
   Object.entries(action.variables || {}).forEach(([key, config]) => {
-    const serviceArgs = Object.keys(output.service_data || {});
+    var serviceArgs = Object.keys(output.service_data || {});
     if (serviceArgs.includes(key)) return;
 
     if (config.type == EVariableType.Level) {
