@@ -97,7 +97,7 @@ export class SchedulerSelector extends LitElement {
       div.chip {
         height: 32px;
         border-radius: 16px;
-        border: 2px solid rgba(let(--rgb-primary-color), 0.54);
+        border: 2px solid rgba(var(--rgb-primary-color), 0.54);
         line-height: 1.25rem;
         font-size: 0.875rem;
         font-weight: 400;
@@ -124,10 +124,10 @@ export class SchedulerSelector extends LitElement {
       }
       .button {
         cursor: pointer;
-        background: let(--secondary-text-color);
+        background: var(--secondary-text-color);
         border-radius: 50%;
         --mdc-icon-size: 14px;
-        color: let(--card-background-color);
+        color: var(--card-background-color);
         width: 16px;
         height: 16px;
         padding: 1px;
