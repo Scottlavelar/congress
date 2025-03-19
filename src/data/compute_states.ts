@@ -8,7 +8,7 @@ import { levelVariable } from './variables/level_variable';
 
 export function computeStates(entity_id: string, hass: HomeAssistant, config: CardConfig): Variable | null {
   //fetch standard states for entity
-  let stateConfig = config.standard_configuration ? standardStates(entity_id, hass) : null;
+  const stateConfig = config.standard_configuration ? standardStates(entity_id, hass) : null;
 
   //get customizations for entity
   var customizedStates = Object.entries(config.customize)
