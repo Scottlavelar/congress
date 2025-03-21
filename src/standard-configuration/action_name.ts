@@ -4,7 +4,7 @@ import { localize } from '../localize/localize';
 
 type actionNameTemplate = (action: string) => string;
 
-const actionNamesList: Record<string, Record<string, string | actionNameTemplate>> = {
+var actionNamesList: Record<string, Record<string, string | actionNameTemplate>> = {
   alarm_control_panel: {
     alarm_disarm: 'ui.card.alarm_control_panel.disarm',
     alarm_arm_home: 'ui.card.alarm_control_panel.arm_home',
@@ -117,7 +117,7 @@ const actionNamesList: Record<string, Record<string, string | actionNameTemplate
   },
 };
 
-export const actionName = (domain: string, action: string, hass: HomeAssistant) => {
+export var actionName = (domain: string, action: string, hass: HomeAssistant) => {
   if (domain in actionNamesList && action in actionNamesList[domain]) {
     let item = actionNamesList[domain][action];
     if (item instanceof Function) {
