@@ -8,9 +8,9 @@ import { formatTime } from '../data/date-time/format_time';
 import { formatDate } from '../data/date-time/format_date';
 import { selectUnit } from '@formatjs/intl-utils';
 
-var secondsPerMinute = 60;
-var secondsPerHour = 3600;
-var hoursPerDay = 24;
+const secondsPerMinute = 60;
+const secondsPerHour = 3600;
+const hoursPerDay = 24;
 
 @customElement('my-relative-time')
 export class MyRelativeTime extends LitElement {
@@ -35,16 +35,16 @@ export class MyRelativeTime extends LitElement {
 
   relativeTime(dateObj: Date): string {
     if (!this._hass) return '';
-    var now = new Date();
+    const now = new Date();
     let delta = (now.getTime() - dateObj.getTime()) / 1000;
-    var tense = delta >= 0 ? 'past' : 'future';
+    const tense = delta >= 0 ? 'past' : 'future';
     delta = Math.abs(delta);
-    var roundedDelta = Math.round(delta);
+    const roundedDelta = Math.round(delta);
 
     if (tense == 'future' && roundedDelta > 0) {
       if (delta / secondsPerHour >= 6) {
-        var startOfToday = now.setHours(0, 0, 0, 0);
-        var daysFromNow = Math.floor(
+        const startOfToday = now.setHours(0, 0, 0, 0);
+        const daysFromNow = Math.floor(
           (dateObj.valueOf() - startOfToday.valueOf()) / (hoursPerDay * secondsPerHour * 1000)
         );
         let day = '';
@@ -82,15 +82,15 @@ export class MyRelativeTime extends LitElement {
         return String(day + ' ' + time).trim();
       } else if (Math.round(delta / secondsPerMinute) > 60 && Math.round(delta / secondsPerMinute) < 120) {
         // in 1 hour and 52 minutes
-        var mins = Math.round(delta / secondsPerMinute - 60);
-        var join = this._hass.localize('ui.common.and');
+        const mins = Math.round(delta / secondsPerMinute - 60);
+        const join = this._hass.localize('ui.common.and');
 
         // @ts-expect-error
-        var text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: 'auto' }).format(
+        const text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: 'auto' }).format(
           1,
           'hour'
         );
-        var text2 = Intl.NumberFormat(getLocale(this._hass).language, {
+        const text2 = Intl.NumberFormat(getLocale(this._hass).language, {
           style: 'unit',
           // @ts-expect-error
           unit: 'minute',
@@ -100,15 +100,15 @@ export class MyRelativeTime extends LitElement {
         return `${text1} ${join} ${text2}`;
       } else if (Math.round(delta) > 60 && Math.round(delta) < 120) {
         // in 1 minute and 52 seconds
-        var seconds = Math.round(delta - 60);
-        var join = this._hass.localize('ui.common.and');
+        const seconds = Math.round(delta - 60);
+        const join = this._hass.localize('ui.common.and');
 
         // @ts-expect-error
-        var text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: 'auto' }).format(
+        const text1 = new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: 'auto' }).format(
           1,
           'minute'
         );
-        var text2 = Intl.NumberFormat(getLocale(this._hass).language, {
+        const text2 = Intl.NumberFormat(getLocale(this._hass).language, {
           style: 'unit',
           // @ts-expect-error
           unit: 'second',
@@ -120,7 +120,7 @@ export class MyRelativeTime extends LitElement {
     }
 
     // in 5 minutes/hours/seconds (or now)
-    var diff = selectUnit(dateObj);
+    const diff = selectUnit(dateObj);
     // @ts-expect-error
     return new Intl.RelativeTimeFormat(getLocale(this._hass).language, { numeric: 'auto' }).format(
       diff.value,
@@ -131,8 +131,8 @@ export class MyRelativeTime extends LitElement {
   render() {
     if (!this._hass || !this.datetime) return html``;
 
-    var now = new Date();
-    var secondsRemaining = Math.round((this.datetime.valueOf() - now.valueOf()) / 1000);
+    const now = new Date();
+    const secondsRemaining = Math.round((this.datetime.valueOf() - now.valueOf()) / 1000);
     let updateInterval = 60;
     if (Math.abs(secondsRemaining) <= 150) updateInterval = Math.max(Math.ceil(Math.abs(secondsRemaining)) / 10, 2);
     if (this.updateInterval != updateInterval) this.startRefreshTimer(updateInterval);
