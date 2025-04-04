@@ -230,23 +230,23 @@ export class SchedulerSelect extends LitElement {
       ha-textfield > ha-icon-button {
         --mdc-icon-button-size: 24px;
         padding: 2px;
-        color: var(--secondary-text-color);
+        color: let(--secondary-text-color);
       }
       ha-svg-icon {
-        color: var(--input-dropdown-icon-color);
+        color: let(--input-dropdown-icon-color);
         position: absolute;
         cursor: pointer;
       }
       ha-svg-icon.disabled {
         cursor: default;
-        color: var(--disabled-text-color);
+        color: let(--disabled-text-color);
       }
       .toggle-button {
         right: 12px;
         top: -10px;
       }
       :host([opened]) .toggle-button {
-        color: var(--primary-color);
+        color: let(--primary-color);
       }
     `;
   }
