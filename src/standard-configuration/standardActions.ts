@@ -1,5 +1,5 @@
 import { computeDomain, computeEntity, HomeAssistant } from 'custom-card-helpers';
-import { DefaultActionIcon } from '../var';
+import { DefaultActionIcon } from '../const';
 import { isDefined, pick } from '../helpers';
 import { Action, EVariableType, ListVariable } from '../types';
 import { parseVariable, VariableConfig } from './variables';
@@ -16,15 +16,15 @@ import { getVariableOptionIcon } from './variable_icons';
 import { listAttribute } from './attribute';
 import { groupActions } from './group';
 
-export var standardActions = (entity_id: string, hass: HomeAssistant, filterCapabilities = true): Action[] => {
-  var domain = computeDomain(entity_id);
+export const standardActions = (entity_id: string, hass: HomeAssistant, filterCapabilities = true): Action[] => {
+  const domain = computeDomain(entity_id);
 
   if (domain == 'group') {
-    var stateObj = hass.states[entity_id];
-    var subEntities = listAttribute(stateObj, 'entity_id');
+    const stateObj = hass.states[entity_id];
+    const subEntities = listAttribute(stateObj, 'entity_id');
     if (!subEntities.length) return [];
 
-    var subActions = subEntities.map(e => standardActions(e, hass, filterCapabilities));
+    const subActions = subEntities.map(e => standardActions(e, hass, filterCapabilities));
     return groupActions(hass, stateObj, subActions);
   }
 
@@ -36,15 +36,15 @@ export var standardActions = (entity_id: string, hass: HomeAssistant, filterCapa
     .filter(isDefined);
 };
 
-var parseAction = (
+const parseAction = (
   id: string,
   config: ActionItem,
   entity_id: string,
   hass: HomeAssistant,
   filterCapabilities: boolean
 ): Action | undefined => {
-  var domain = computeDomain(entity_id);
-  var stateObj = hass.states[entity_id];
+  const domain = computeDomain(entity_id);
+  const stateObj = hass.states[entity_id];
   if (config.condition && !config.condition(stateObj)) return;
 
   if (id.startsWith('_')) id = id = id.substring(1);
@@ -57,7 +57,7 @@ var parseAction = (
   };
 
   if (config.supported_feature) {
-    var supportedFeature =
+    const supportedFeature =
       config.supported_feature instanceof Function ? config.supported_feature(stateObj) : config.supported_feature;
     action = {
       ...action,
@@ -88,7 +88,7 @@ var parseAction = (
     return;
 
   //insert entity ID for services notify / script
-  var match = action.service.match(/^[a-z_]+\.(\{entity_id\})$/);
+  const match = action.service.match(/^[a-z_]+\.(\{entity_id\})$/);
   if (match)
     action = {
       ...action,
@@ -98,7 +98,7 @@ var parseAction = (
   return action;
 };
 
-var parseActionVariable = (
+const parseActionVariable = (
   domain: string,
   variable: string,
   variableConfig: VariableConfig,
@@ -111,7 +111,7 @@ var parseActionVariable = (
   if ('options' in config && isDefined(config.options)) {
     let options = [...config.options];
     if (!filterCapabilities) {
-      var extraOptions = getVariableOptions(domain, variable).filter(k => !options.map(e => e.value).includes(k));
+      const extraOptions = getVariableOptions(domain, variable).filter(k => !options.map(e => e.value).includes(k));
       options = [...options, ...extraOptions.map(e => Object({ value: e }))];
     }
     options = options.map(e =>
