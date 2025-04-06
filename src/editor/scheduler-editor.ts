@@ -6,7 +6,7 @@ import { Action, CardConfig, EntityElement, ScheduleConfig, Timeslot } from '../
 import { getLocale, IsDefaultName, isDefined, isEqual, omit, pick } from '../helpers';
 import { dialogStyle } from '../styles';
 import { deleteSchedule, editSchedule, fetchScheduleItem, handleError, saveSchedule } from '../data/websockets';
-import { ETabOptions } from '../let';
+import { ETabOptions } from '../const';
 import { DialogParams } from '../components/generic-dialog';
 import { localize } from '../localize/localize';
 import { showDialog } from '../data/custom_dialog';
@@ -73,9 +73,9 @@ export class SchedulerEditorDialog extends LitElement {
   }
 
   render() {
-    let useTimeScheme = this.schedule?.timeslots.every(e => e.stop);
+    const useTimeScheme = this.schedule?.timeslots.every(e => e.stop);
 
-    let tabLabel = (tab: ETabOptions) => {
+    const tabLabel = (tab: ETabOptions) => {
       if (tab == ETabOptions.Entity) return this.hass.localize('ui.components.entity.entity-picker.entity');
       if (tab == ETabOptions.Time) return this.hass.localize('ui.dialogs.helper_settings.input_datetime.time');
       if (tab == ETabOptions.Options) return this.hass.localize('ui.dialogs.helper_settings.input_select.options');
@@ -160,7 +160,7 @@ export class SchedulerEditorDialog extends LitElement {
   }
 
   private _handleUpdateParams(ev: CustomEvent): void {
-    let changes = ev.detail as {
+    const changes = ev.detail as {
       schedule?: ScheduleConfig;
       actions?: Action[];
       entities?: EntityElement[];
@@ -174,8 +174,8 @@ export class SchedulerEditorDialog extends LitElement {
   }
 
   private _handleTabChanged(ev: CustomEvent): void {
-    let oldTab = this._currTab;
-    let newTab = this._tabs[ev.detail.selected] as ETabOptions;
+    const oldTab = this._currTab;
+    const newTab = this._tabs[ev.detail.selected] as ETabOptions;
     if (newTab != ETabOptions.Time && !this.schedule) {
       ev.preventDefault();
       (ev.target as any).activeIndex = 0;
@@ -191,7 +191,7 @@ export class SchedulerEditorDialog extends LitElement {
 
   private async _handleSaveClick() {
     if (!this.hass) return;
-    let schedule = { ...this.schedule! };
+    const schedule = { ...this.schedule! };
 
     schedule = {
       ...schedule,
@@ -216,7 +216,7 @@ export class SchedulerEditorDialog extends LitElement {
     };
 
     if (this.editItem) {
-      let oldSchedule = await fetchScheduleItem(this.hass, this.editItem);
+      const oldSchedule = await fetchScheduleItem(this.hass, this.editItem);
       if (
         isEqual(omit(schedule, 'timeslots'), omit(pick(oldSchedule, Object.keys(schedule)), 'timeslots')) &&
         schedule.timeslots.length == oldSchedule.timeslots.length &&
@@ -225,8 +225,8 @@ export class SchedulerEditorDialog extends LitElement {
         // don't save if there are no changes
       } else {
         if (!oldSchedule.enabled) {
-          let result = await new Promise(resolve => {
-            let params: DialogParams = {
+          const result = await new Promise(resolve => {
+            const params: DialogParams = {
               title: localize('ui.dialog.enable_schedule.title', getLocale(this.hass)),
               description: localize('ui.dialog.enable_schedule.description', getLocale(this.hass)),
               primaryButtonLabel: this.hass.localize('ui.common.yes'),
@@ -269,9 +269,9 @@ export class SchedulerEditorDialog extends LitElement {
   private async _handleDeleteClick(ev: Event) {
     console.log(this.hass.localize('ui.common.ok'));
     if (!this.editItem) return;
-    let element = ev.target as HTMLElement;
-    let result = await new Promise(resolve => {
-      let params: DialogParams = {
+    const element = ev.target as HTMLElement;
+    const result = await new Promise(resolve => {
+      const params: DialogParams = {
         title: localize('ui.dialog.confirm_delete.title', getLocale(this.hass)),
         description: localize('ui.dialog.confirm_delete.description', getLocale(this.hass)),
         primaryButtonLabel: this.hass.localize('ui.common.ok'),
