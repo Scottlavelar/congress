@@ -28,14 +28,14 @@ import { migrateActionConfig } from '../data/actions/migrate_action_config';
 import { assignAction } from '../data/actions/assign_action';
 import { stringToTime, roundTime, timeToString } from '../data/date-time/time';
 import { formatTime } from '../data/date-time/format_time';
-import { ETabOptions } from '../const';
+import { ETabOptions } from '../var';
 
 import '../components/button-group';
 import '../components/generic-dialog';
 import { DialogParams } from '../components/generic-dialog';
 import { showDialog } from '../data/custom_dialog';
 
-const defaultTimeslots = [
+var defaultTimeslots = [
   {
     start: '00:00:00',
     stop: '08:00:00',
@@ -96,7 +96,7 @@ export class SchedulerEditorEntity extends LitElement {
   async firstUpdated() {
     this.scheduleEntities = (await fetchSchedules(this.hass!)).map(e => e.entity_id);
     if (this.entities && this.entities.length) {
-      const group = this.getGroups().find(group => group.entities.find(e => e == this.entities![0]));
+      var group = this.getGroups().find(group => group.entities.find(e => e == this.entities![0]));
       if (!group) return;
       this.selectedGroup = group;
       this.multipleEntity = this.entities.length > 1;
@@ -105,8 +105,8 @@ export class SchedulerEditorEntity extends LitElement {
     if (this.schedule) {
       if (this.schedule.timeslots.every(e => e.stop)) this.timeSchemeSelected = true;
       else {
-        const actions = unique(flatten(this.schedule.timeslots.map(e => e.actions)));
-        const matchedActions = this.getActionsForEntity().filter(e => actions.some(a => compareActions(a, e, true)));
+        var actions = unique(flatten(this.schedule.timeslots.map(e => e.actions)));
+        var matchedActions = this.getActionsForEntity().filter(e => actions.some(a => compareActions(a, e, true)));
         if (matchedActions.length == 1) this.selectedAction = matchedActions[0];
       }
     }
@@ -114,17 +114,17 @@ export class SchedulerEditorEntity extends LitElement {
 
   getGroups() {
     if (!this.hass || !this.config) return [];
-    const entities = computeEntities(this.hass, this.config).filter(
+    var entities = computeEntities(this.hass, this.config).filter(
       e => computeDomain(e) !== 'switch' || !this.scheduleEntities.includes(e)
     );
-    const groups = entityGroups(entities, this.config, this.hass);
+    var groups = entityGroups(entities, this.config, this.hass);
     groups.sort(sortAlphabetically);
     return groups;
   }
 
   getEntitiesForGroup() {
     if (!this.selectedGroup || !this.hass || !this.config) return [];
-    const entities = this.selectedGroup.entities.map(e => parseEntity(e, this.hass!, this.config!));
+    var entities = this.selectedGroup.entities.map(e => parseEntity(e, this.hass!, this.config!));
     entities.sort(sortAlphabetically);
     return entities;
   }
@@ -132,7 +132,7 @@ export class SchedulerEditorEntity extends LitElement {
   getActionsForEntity(entityIds?: string[]) {
     if (!entityIds) entityIds = this.entities;
     if (!this.hass || !this.config || !entityIds.length) return [];
-    const actions = computeActions(entityIds, this.hass!, this.config!).map(e =>
+    var actions = computeActions(entityIds, this.hass!, this.config!).map(e =>
       Object.assign(e, { name: computeActionDisplay(e) })
     );
     actions.sort(sortAlphabetically);
@@ -141,12 +141,12 @@ export class SchedulerEditorEntity extends LitElement {
 
   render() {
     if (!this.hass || !this.config) return html``;
-    const groups = this.getGroups();
+    var groups = this.getGroups();
     if (groups.length == 1 && !isEqual(this.selectedGroup, groups[0])) this.selectGroup(groups[0]);
-    const entities = this.getEntitiesForGroup();
+    var entities = this.getEntitiesForGroup();
     if (entities.length == 1 && this.entities[0] !== entities[0].id) this.selectEntity(entities[0].id);
 
-    const actions = this.getActionsForEntity();
+    var actions = this.getActionsForEntity();
 
     return html`
       <div class="content">
@@ -256,7 +256,7 @@ export class SchedulerEditorEntity extends LitElement {
   }
 
   async selectEntity(ev: string | string[] | Event) {
-    const value = typeof ev == 'object' ? AsArray(((ev as Event).target as HTMLInputElement).value) : AsArray(ev);
+    var value = typeof ev == 'object' ? AsArray(((ev as Event).target as HTMLInputElement).value) : AsArray(ev);
     let action = this.selectedAction;
     if (action) {
       let availableActions = this.getActionsForEntity(value);
@@ -272,7 +272,7 @@ export class SchedulerEditorEntity extends LitElement {
     } else action = undefined;
 
     if (this.schedule && value.length && (this.timeSchemeSelected || this.selectedAction)) {
-      const res = await this.migrateSchedule(value, this.timeSchemeSelected ? null : action!);
+      var res = await this.migrateSchedule(value, this.timeSchemeSelected ? null : action!);
       if (!res) {
         this.selectedAction = null;
         if (typeof ev == 'object') (ev as Event).stopPropagation();
@@ -294,9 +294,9 @@ export class SchedulerEditorEntity extends LitElement {
   }
 
   async selectAction(ev: CustomEvent) {
-    const val = ev.detail as Action;
+    var val = ev.detail as Action;
     if (this.schedule) {
-      const res = await this.migrateSchedule(this.entities, val);
+      var res = await this.migrateSchedule(this.entities, val);
       if (!res) {
         this.selectedAction = null;
         ev.stopPropagation();
@@ -316,7 +316,7 @@ export class SchedulerEditorEntity extends LitElement {
 
   async selectTimeScheme(ev: Event) {
     if (this.schedule) {
-      const res = await this.migrateSchedule(this.entities, null);
+      var res = await this.migrateSchedule(this.entities, null);
       if (!res) {
         ev.stopPropagation();
         return;
@@ -334,14 +334,14 @@ export class SchedulerEditorEntity extends LitElement {
 
   nextClick() {
     if (!this.hass || !this.config || (!this.selectedAction && !this.timeSchemeSelected)) return;
-    const defaultTags = AsArray(this.config.tags).length == 1 ? AsArray(this.config.tags).slice(0, 1) : [];
+    var defaultTags = AsArray(this.config.tags).length == 1 ? AsArray(this.config.tags).slice(0, 1) : [];
 
     if (!this.timeSchemeSelected) {
       let now = stringToTime(formatTime(new Date(), getLocale(this.hass), TimeFormat.twenty_four), this.hass);
       now = roundTime(now, this.config.time_step, { wrapAround: true });
       this.actions = [this.selectedAction!];
 
-      const defaultTimeslot: Timeslot = {
+      var defaultTimeslot: Timeslot = {
         start: timeToString(now),
         actions: this.entities.map(e => assignAction(e, this.actions![0])),
       };
@@ -381,13 +381,13 @@ export class SchedulerEditorEntity extends LitElement {
     let canMigrate = true;
     let schedule: ScheduleConfig = deepCopy(this.schedule!);
 
-    const actions = selectedAction !== null ? [selectedAction] : computeActions(entities, this.hass!, this.config!);
+    var actions = selectedAction !== null ? [selectedAction] : computeActions(entities, this.hass!, this.config!);
 
     if (!this.timeSchemeSelected) {
       //migrate a simple schedule
 
       if (selectedAction !== null) {
-        const newActions =
+        var newActions =
           migrateActionConfig(schedule.timeslots[0].actions[0], entities, actions, this.hass!) ||
           entities.map(e => assignAction(e, actions[0]));
 
@@ -413,7 +413,7 @@ export class SchedulerEditorEntity extends LitElement {
         let now = stringToTime(formatTime(new Date(), getLocale(this.hass!), TimeFormat.twenty_four), this.hass!);
         now = roundTime(now, this.config!.time_step, { wrapAround: true });
 
-        const defaultTimeslot: Timeslot = {
+        var defaultTimeslot: Timeslot = {
           start: timeToString(now),
           actions: entities.map(e => assignAction(e, actions![0])),
         };
@@ -421,8 +421,8 @@ export class SchedulerEditorEntity extends LitElement {
         schedule = { ...schedule, timeslots: [defaultTimeslot] };
         canMigrate = false;
       } else {
-        const oldActions = schedule.timeslots.map(e => e.actions[0]);
-        const newActions = oldActions.map(v => migrateActionConfig(v, entities, actions, this.hass!));
+        var oldActions = schedule.timeslots.map(e => e.actions[0]);
+        var newActions = oldActions.map(v => migrateActionConfig(v, entities, actions, this.hass!));
 
         canMigrate = oldActions.every((e, i) => newActions[i] !== null && compareActions(e, newActions[i]![0]));
 
@@ -433,7 +433,7 @@ export class SchedulerEditorEntity extends LitElement {
       }
     }
 
-    const output = {
+    var output = {
       schedule: schedule,
       actions: actions,
       entities: entities.map(e => parseEntity(e, this.hass!, this.config!)),
@@ -441,7 +441,7 @@ export class SchedulerEditorEntity extends LitElement {
 
     return new Promise(resolve => {
       if (!canMigrate) {
-        const params: DialogParams = {
+        var params: DialogParams = {
           title: localize('ui.dialog.confirm_migrate.title', getLocale(this.hass!)),
           description: localize('ui.dialog.confirm_migrate.description', getLocale(this.hass!)),
           primaryButtonLabel: this.hass!.localize('ui.common.yes'),
