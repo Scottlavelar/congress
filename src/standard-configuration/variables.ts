@@ -33,12 +33,12 @@ type TextVariableConfig = {
 
 export type VariableConfig = ListVariableType | LevelVariableType | TextVariableConfig;
 
-export const parseVariable = (
+export var parseVariable = (
   config: VariableConfig,
   stateObj: HassEntity | undefined,
   hass: HomeAssistant
 ): Partial<LevelVariable> | AtLeast<ListVariable, 'options'> | Partial<TextVariable> => {
-  const res =
+  var res =
     'template' in config && isDefined(config.template)
       ? { ...omit(config, 'template'), ...config.template(stateObj, hass) }
       : ({ ...config } as ListVariableConfig | LevelVariableConfig | TextVariableConfig);
@@ -52,12 +52,12 @@ export const parseVariable = (
   }
 };
 
-export const parseListVariable = (
+export var parseListVariable = (
   config: ListVariableConfig,
   stateObj: HassEntity | undefined
 ): AtLeast<ListVariable, 'options'> => {
   if (typeof config.options == 'string') {
-    const res = listAttribute(stateObj, config.options);
+    var res = listAttribute(stateObj, config.options);
     return {
       options: res.map(e => Object({ value: e })),
     };
@@ -72,7 +72,7 @@ export const parseListVariable = (
   }
 };
 
-export const parseLevelVariable = (config: LevelVariableConfig, stateObj: HassEntity | undefined) => {
+export var parseLevelVariable = (config: LevelVariableConfig, stateObj: HassEntity | undefined) => {
   let result: Partial<LevelVariable> = pick(config, ['unit', 'optional', 'scale_factor']);
   if (isDefined(config.min)) result = { ...result, min: numericAttribute(stateObj, config.min) };
   if (isDefined(config.max)) result = { ...result, max: numericAttribute(stateObj, config.max) };
