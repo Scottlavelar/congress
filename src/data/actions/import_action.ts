@@ -6,10 +6,10 @@ import { compareActions } from './compare_actions';
 import { listVariable } from '../variables/list_variable';
 
 export function importAction(action: ServiceCall, hass: HomeAssistant): Action {
-  var id = action.entity_id || action.service;
-  var service = action.service;
-  var serviceData = action.service_data || {};
-  var serviceArgs = Object.keys(serviceData);
+  const id = action.entity_id || action.service;
+  const service = action.service;
+  const serviceData = action.service_data || {};
+  const serviceArgs = Object.keys(serviceData);
 
   let actions = standardActions(id, hass, false);
   let matches = actions.filter(e => compareActions(action, e, true));
@@ -27,10 +27,10 @@ export function importAction(action: ServiceCall, hass: HomeAssistant): Action {
     //the match is ambiguous, check service_data to find the action with best overlap
 
     actions.sort((a, b) => {
-      var fixedArgsOverlapA = Object.entries(a.service_data || {})
+      const fixedArgsOverlapA = Object.entries(a.service_data || {})
         .map(([k, v]): number => (k in serviceData ? (serviceData[k] == v ? 1 : -1) : 0))
         .reduce((sum, e) => sum + e, 0);
-      var fixedArgsOverlapB = Object.entries(b.service_data || {})
+      const fixedArgsOverlapB = Object.entries(b.service_data || {})
         .map(([k, v]): number => (k in serviceData ? (serviceData[k] == v ? 1 : -1) : 0))
         .reduce((sum, e) => sum + e, 0);
 
@@ -38,18 +38,18 @@ export function importAction(action: ServiceCall, hass: HomeAssistant): Action {
       if (fixedArgsOverlapA > fixedArgsOverlapB) return -1;
       if (fixedArgsOverlapA < fixedArgsOverlapB) return 1;
 
-      var serviceDataA = unique([...Object.keys(a.service_data || {}), ...Object.keys(a.variables || {})]);
-      var serviceDataB = unique([...Object.keys(b.service_data || {}), ...Object.keys(b.variables || {})]);
+      const serviceDataA = unique([...Object.keys(a.service_data || {}), ...Object.keys(a.variables || {})]);
+      const serviceDataB = unique([...Object.keys(b.service_data || {}), ...Object.keys(b.variables || {})]);
 
-      var overlapA = serviceArgs.filter(e => serviceDataA.includes(e)).length;
-      var overlapB = serviceArgs.filter(e => serviceDataB.includes(e)).length;
+      const overlapA = serviceArgs.filter(e => serviceDataA.includes(e)).length;
+      const overlapB = serviceArgs.filter(e => serviceDataB.includes(e)).length;
 
       //if one of the services has more variable serviceArgs in common, it is preferred
       if (overlapA > overlapB) return -1;
       if (overlapA < overlapB) return 1;
 
-      var extraKeysA = serviceDataA.filter(e => !serviceArgs.includes(e)).length;
-      var extraKeysB = serviceDataB.filter(e => !serviceArgs.includes(e)).length;
+      const extraKeysA = serviceDataA.filter(e => !serviceArgs.includes(e)).length;
+      const extraKeysB = serviceDataB.filter(e => !serviceArgs.includes(e)).length;
 
       //if one of the services has less extra serviceArgs, it is preferred
       if (extraKeysA > extraKeysB) return 1;
