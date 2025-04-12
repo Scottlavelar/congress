@@ -8,7 +8,7 @@ import { computeVariables } from './compute_variables';
 export function computeMergedVariable(
   ...variables: Partial<LevelVariable | ListVariable | TextVariable>[]
 ): LevelVariable | ListVariable | TextVariable | undefined {
-  let types = unique(variables.map(e => e.type).filter(isDefined));
+  const types = unique(variables.map(e => e.type).filter(isDefined));
   if (!types.length) {
     variables = Object.values(computeVariables(Object.assign({}, ...variables))!);
     return computeMergedVariable(...variables);
