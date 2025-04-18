@@ -1,0 +1,165 @@
+{
+  "services": {
+    "generic": {
+      "parameter_to_value": "{parameter} vers {value}",
+      "action_with_parameter": "{action} avec {parameter}"
+    },
+    "climate": {
+      "set_temperature": "ajuster la température[ à {temperature}]",
+      "set_temperature_hvac_mode_heat": "chauffe[ à {temperature}]",
+      "set_temperature_hvac_mode_cool": "refroidit[ à {temperature}]",
+      "set_temperature_hvac_mode_heat_cool": "chauffe/refroidit[ à {temperature}]",
+      "set_temperature_hvac_mode_heat_cool_range": "chauffe/refroidit[ à {target_temp_low} - {target_temp_high}]",
+      "set_temperature_hvac_mode_auto": "auto[ à {temperature}]",
+      "set_hvac_mode": "ajuster le mode[ à {hvac_mode}]",
+      "set_preset_mode": "choisir le pré-réglage[ {preset_mode}]",
+      "set_fan_mode": "ajuster le mode de ventilation[ à {fan_mode}]"
+    },
+    "cover": {
+      "close_cover": "fermer",
+      "open_cover": "ouvrir",
+      "set_cover_position": "ajuster la position[ à {position}]",
+      "set_cover_tilt_position": "régler les volets[ à {tilt_position}]"
+    },
+    "fan": {
+      "set_speed": "ajuster la vitesse[ à {speed}]",
+      "set_direction": "ajuster l'orientation[ vers {direction}]",
+      "oscillate": "ajuster l'oscillation[ à {oscillate}]"
+    },
+    "humidifier": {
+      "set_humidity": "ajuster l'humidité[ à {humidity}]",
+      "set_mode": "ajuster le mode[ à {mode}]"
+    },
+    "input_number": {
+      "set_value": "ajuster la valeur[ à {value}]"
+    },
+    "input_select": {
+      "select_option": "choisir l'option[ {option}]"
+    },
+    "select": {
+      "select_option": "choisir l'option[ {option}]"
+    },
+    "light": {
+      "turn_on": "allumer[ avec une luminosité de {brightness}]"
+    },
+    "media_player": {
+      "select_source": "choisir la source[ {source}]"
+    },
+    "notify": {
+      "notify": "envoyer une notification"
+    },
+    "script": {
+      "script": "exécuter"
+    },
+    "vacuum": {
+      "start_pause": "démarrer / pause"
+    },
+    "water_heater": {
+      "set_operation_mode": "ajuster le mode[ à {operation_mode}]",
+      "set_away_mode": "choisir le mode absent"
+    }
+  },
+  "domains": {
+    "alarm_control_panel": "panneau de contrôle de l'alarme",
+    "binary_sensor": "capteurs binaires",
+    "climate": "thermostat",
+    "cover": "volet",
+    "fan": "ventilateur",
+    "group": "groupe",
+    "humidifier": "humidificateur",
+    "input_boolean": "entrée booléenne",
+    "input_number": "entrée numérique",
+    "input_select": "entrée de sélection",
+    "lawn_mower": "lawn mower",
+    "light": "lumière",
+    "lock": "serrure",
+    "media_player": "lecteur multimédia",
+    "notify": "notification",
+    "switch": "interrupteur",
+    "vacuum": "aspirateur",
+    "water_heater": "chauffe eau"
+  },
+  "ui": {
+    "components": {
+      "date": {
+        "day_types_short": {
+          "daily": "quotidien",
+          "workdays": "jours de travail",
+          "weekend": "weekend"
+        },
+        "day_types_long": {
+          "daily": "chaque jour",
+          "workdays": "en semaine",
+          "weekend": "le weekend"
+        },
+        "days": "jours",
+        "tomorrow": "demain",
+        "repeated_days": "chaque {days}",
+        "repeated_days_except": "chaque jour sauf {excludedDays}",
+        "days_range": "de {startDay} à {endDay}",
+        "next_week_day": "{weekday} prochain"
+      },
+      "time": {
+        "absolute": "à {time}",
+        "interval": "de {startTime} à {endTime}",
+        "at_midnight": "à minuit",
+        "at_noon": "à midi",
+        "at_sun_event": "au {sunEvent}"
+      }
+    },
+    "dialog": {
+      "enable_schedule": {
+        "title": "Compléter les modifs",
+        "description": "Le planning qui a été modifié est actuellement désactivé, doit-il être activé ?"
+      },
+      "confirm_delete": {
+        "title": "Supprimer l'entité ?",
+        "description": "Voulez-vous vraiment supprimer cette entité ?"
+      },
+      "confirm_migrate": {
+        "title": "Modifier l'horaire",
+        "description": "Certains paramètres seront perdus par ce changement. Voulez-vous poursuivre?"
+      }
+    },
+    "panel": {
+      "common": {
+        "title": "Planificateur",
+        "new_schedule": "Nouvel horaire",
+        "default_name": "Horaire #{id}"
+      },
+      "overview": {
+        "no_entries": "il n'y a pas d'entrée à montrer",
+        "backend_error": "Impossible de se connecter au composant du planificateur. Il doit être installé en tant qu'intégration avant que cette carte ne puisse être utilisée.",
+        "excluded_items": "{number} {if number is 1}entrée exclue{else}entrées exclues",
+        "hide_excluded": "cacher les entrées exclues",
+        "additional_tasks": "{number} {if number is 1}tâche à venir{else}tâches à venir"
+      },
+      "entity_picker": {
+        "no_groups_defined": "Aucun groupe défini",
+        "no_group_selected": "Choisir un groupe en premier",
+        "no_entities_for_group": "Il n'y a pas d'entité dans ce groupe",
+        "no_entity_selected": "Choisir une entité en premier",
+        "no_actions_for_entity": "Il n'y a pas d'action pour cette entité",
+        "make_scheme": "créer un schéma",
+        "multiple": "Multiple"
+      },
+      "time_picker": {
+        "no_timeslot_selected": "Choisir d'abord une plage horaire",
+        "time_scheme": "Schéma",
+        "time_input_mode": "contrôle temporel"
+      },
+      "conditions": {
+        "equal_to": "égal à",
+        "unequal_to": "pas égal à",
+        "all": "toutes",
+        "any": "une",
+        "no_conditions_defined": "Il n'y a pas de condition définie",
+        "track_conditions": "Ré-évaluer lorsque la condition change"
+      },
+      "options": {
+        "repeat_type": "comportement après l'achèvement",
+        "period": "période"
+      }
+    }
+  }
+}

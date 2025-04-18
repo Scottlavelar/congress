@@ -1,0 +1,165 @@
+{
+  "services": {
+    "generic": {
+      "parameter_to_value": "{parameter} к {value}",
+      "action_with_parameter": "{action} с {parameter}"
+    },
+    "climate": {
+      "set_temperature": "установить температуру[ {temperature}]",
+      "set_temperature_hvac_mode_heat": "обогрев[ {temperature}]",
+      "set_temperature_hvac_mode_cool": "охлаждение[ {temperature}]",
+      "set_temperature_hvac_mode_heat_cool": "обогрев/охлаждение[ {temperature}]",
+      "set_temperature_hvac_mode_heat_cool_range": "обогрев/охлаждение[ {target_temp_low} - {target_temp_high}]",
+      "set_temperature_hvac_mode_auto": "aвто[ {temperature}]",
+      "set_hvac_mode": "установить режим[ {hvac_mode}]",
+      "set_preset_mode": "выбрать набор настроек[ {preset_mode}]",
+      "set_fan_mode": "set fan mode[ to {fan_mode}]"
+    },
+    "cover": {
+      "close_cover": "закрыть",
+      "open_cover": "открыть",
+      "set_cover_position": "установить позицию[ {position}]",
+      "set_cover_tilt_position": "установить наклон[ {tilt_position}]"
+    },
+    "fan": {
+      "set_speed": "установить скорость[ {speed}]",
+      "set_direction": "установить направление[ {direction}]",
+      "oscillate": "установить колебание[ {oscillate}]"
+    },
+    "humidifier": {
+      "set_humidity": "установить влажность[ {humidity}]",
+      "set_mode": "установить режим[ {mode}]"
+    },
+    "input_number": {
+      "set_value": "установить значение[ в {value}]"
+    },
+    "input_select": {
+      "select_option": "установить опцию[ {option}]"
+    },
+    "select": {
+      "select_option": "установить опцию[ {option}]"
+    },
+    "light": {
+      "turn_on": "включить[ с {brightness} яркостью]"
+    },
+    "media_player": {
+      "select_source": "выбрать источник[ {source}]"
+    },
+    "notify": {
+      "notify": "послать сообщение"
+    },
+    "script": {
+      "script": "запустить"
+    },
+    "vacuum": {
+      "start_pause": "старт / пауза"
+    },
+    "water_heater": {
+      "set_operation_mode": "установить режим[ {operation_mode}]",
+      "set_away_mode": "установить режим вне дома"
+    }
+  },
+  "domains": {
+    "alarm_control_panel": "панель управления сигнализацией",
+    "binary_sensor": "binary sensors",
+    "climate": "климат",
+    "cover": "жалюзи",
+    "fan": "вентиляторы",
+    "group": "группы",
+    "humidifier": "увлажнители",
+    "input_boolean": "логические",
+    "input_number": "числовые",
+    "input_select": "списки",
+    "lawn_mower": "lawn mower",
+    "light": "освещение",
+    "lock": "замки",
+    "media_player": "медиа-плееры",
+    "notify": "notification",
+    "switch": "розетки",
+    "vacuum": "пылесосы",
+    "water_heater": "подогреватели воды"
+  },
+  "ui": {
+    "components": {
+      "date": {
+        "day_types_short": {
+          "daily": "ежедневно",
+          "workdays": "рабочие дни",
+          "weekend": "выходные"
+        },
+        "day_types_long": {
+          "daily": "каждый день",
+          "workdays": "по рабочим дням",
+          "weekend": "в выходные"
+        },
+        "days": "дни",
+        "tomorrow": "завтра",
+        "repeated_days": "каждый {days}",
+        "repeated_days_except": "каждый день кроме {excludedDays}",
+        "days_range": "с {startDay} до {endDay}",
+        "next_week_day": "в следующую {weekday}"
+      },
+      "time": {
+        "absolute": "в {time}",
+        "interval": "с {startTime} до {endTime}",
+        "at_midnight": "в полночь",
+        "at_noon": "в полдень",
+        "at_sun_event": "в {sunEvent}"
+      }
+    },
+    "dialog": {
+      "enable_schedule": {
+        "title": "Завершите модификации",
+        "description": "Расписание, которое было изменено, в настоящее время отключено, следует ли его включить?"
+      },
+      "confirm_delete": {
+        "title": "Удалить объект?",
+        "description": "Вы уверены, что хотите удалить этот объект?"
+      },
+      "confirm_migrate": {
+        "title": "Изменить расписание",
+        "description": "При этом некоторые настройки будут потеряны. Вы хотите продолжить?"
+      }
+    },
+    "panel": {
+      "common": {
+        "title": "Планировщик",
+        "new_schedule": "Новое расписание",
+        "default_name": "Расписание #{id}"
+      },
+      "overview": {
+        "no_entries": "Отсутствуют элементы",
+        "backend_error": "Нет соединенияс scheduler component. Scheduler component должен быть установлен до применения этой карты.",
+        "excluded_items": "{number} исключено {if number is 1} элемент {else} элементов",
+        "hide_excluded": "скрыть исключенные элементы",
+        "additional_tasks": "{number} больше {if number is 1} задача {else} задач"
+      },
+      "entity_picker": {
+        "no_groups_defined": "Не определены группы",
+        "no_group_selected": "Выберите группу",
+        "no_entities_for_group": "Отсутствуют элементы в группе",
+        "no_entity_selected": "Выберите элемент",
+        "no_actions_for_entity": "Нет действий для этого элемента",
+        "make_scheme": "создать схему",
+        "multiple": "Множественный"
+      },
+      "time_picker": {
+        "no_timeslot_selected": "Выберите временной слот",
+        "time_scheme": "Cхему",
+        "time_input_mode": "Time control mode"
+      },
+      "conditions": {
+        "equal_to": "равно",
+        "unequal_to": "не равно",
+        "all": "все",
+        "any": "любое",
+        "no_conditions_defined": "Не определены условия",
+        "track_conditions": "Re-evaluate when conditions change"
+      },
+      "options": {
+        "repeat_type": "поведение после срабатывания",
+        "period": "период"
+      }
+    }
+  }
+}
